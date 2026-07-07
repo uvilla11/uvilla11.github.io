@@ -439,7 +439,7 @@ footer .shell{
       <div class="reveal">
         <h3>NASA Psyche — Landing System for Hypothesized Surfaces</h3>
         <p class="role-line">EMBEDDED SYSTEM DESIGN LEAD &middot; 2024</p>
-        <p>Proof-of-concept asteroid lander for the unknown terrain of 16-Psyche. I led the electronics: a custom KiCad PCB carrying PIC and PSoC microcontrollers, motor drivers, and sensor conditioning — plus every line of firmware, from door latches to the Hall-effect rover positioning system.</p>
+        <p>Team Hephaestus built a steel-and-aluminum lander with a spherical underbelly to handle 16-Psyche's unknown terrain. I led the electronics: a custom KiCad PCB carrying PIC and PSoC microcontrollers, motor drivers, and sensor conditioning — plus every line of firmware, from door latches to the Hall-effect rover positioning system.</p>
         <dl class="spec-list">
           <div><dt>Rover rotation accuracy</dt><dd>&#177;2&#176;</dd></div>
           <div><dt>Automated test cycles, zero faults</dt><dd>500+</dd></div>
@@ -452,18 +452,51 @@ footer .shell{
     <!-- secondary projects -->
     <div class="rows">
       <div class="row reveal">
-        <div class="row-fig">
-          <svg viewBox="0 0 84 64" fill="none" aria-label="Soil moisture sensor signal with ADC sample points">
-            <path d="M4 56 H80 M4 56 V6" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
-            <path d="M4 40 C14 40 16 22 26 22 C36 22 38 46 48 46 C58 46 60 14 70 14 L80 14" stroke="var(--accent)" stroke-width="1.6" class="stroke-a"/>
-            <g fill="var(--accent)"><circle cx="26" cy="22" r="2.4"/><circle cx="48" cy="46" r="2.4"/><circle cx="70" cy="14" r="2.4"/></g>
-          </svg>
+        <div class="row-fig" style="overflow:hidden;padding:0">
+          <img src="EGR%20598%20SolarSPELL.jpeg" alt="SolarSENSE prototype showing LILYGO T-Higrow board and soil sensor" style="width:100%;height:100%;object-fit:cover">
         </div>
         <div>
           <h3>SolarSENSE — Edge-AI Soil Sensing</h3>
           <p>Led the team that put a TinyML soil-health model on an 8-bit MCU for the ASU SolarSPELL Initiative — actionable readings for farmers in Rwanda, no cloud required. Shown at the Spring 2025 ASU Innovation Showcase.</p>
         </div>
         <div class="row-tags"><span><b>TINYML</b></span><span>8-BIT MCU</span><span>2025</span></div>
+      </div>
+
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Stylized glasses with electronics enclosure">
+            <path d="M10 36 c0-16,12-24,24-24 c12,0,24,8,24,24" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M58 36 c0-16,12-24,24-24 c12,0,24,8,24,24" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M34 36 h16" stroke="currentColor" stroke-width="2"/>
+            <rect x="26" y="44" width="32" height="14" rx="4" stroke="var(--accent)" stroke-width="1.5" class="stroke-a"/>
+            <circle cx="42" cy="51" r="2.5" fill="currentColor"/>
+            <path d="M10 36 v12 h16 M58 36 v12 h-16" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div>
+          <h3>ShadeShift — Therapeutic Eyewear</h3>
+          <p>Team lead on a 4-in-1 smart eyewear system for TBI patients, in collaboration with Barrow Neurological Institute at Dignity Health. Custom 3D-printed frames with electrochromic tints, PDLC stroboscopic training, binasal occlusion, and magnetic color filters — all integrated with an external control module.</p>
+        </div>
+        <div class="row-tags"><span><b>MECHATRONICS</b></span><span>3D PRINTING</span><span>2025</span></div>
+      </div>
+
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Microgrid system diagram with PV panels, battery, generator, and hospital load">
+            <rect x="6" y="8" width="26" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 18 l4-6 h8 l4 6" stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a"/>
+            <rect x="38" y="8" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M48 10 v10 M43 15 h10" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="48" y="32" width="26" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M61 34 v4 l-4 4 h8 l-4-4 v-4" stroke="var(--accent)" stroke-width="1.5" class="stroke-a"/>
+            <path d="M24 28 v28 h30 M54 48 v-8" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Microgrid Design — Queen's Medical Center</h3>
+          <p>Independent techno-economic analysis for a Level I Trauma Center in Honolulu. Modeled solar PV, battery storage, and diesel generation in XENDEE across 1-day to 2-week outage scenarios. Questioned over-optimistic initial results to produce a defensible, real-world design.</p>
+        </div>
+        <div class="row-tags"><span><b>XENDEE</b></span><span>POWER SYSTEMS</span><span>2025</span></div>
       </div>
 
       <div class="row reveal">
@@ -512,7 +545,7 @@ footer .shell{
         </div>
         <div>
           <h3>Room Weather Control</h3>
-          <p>ESP32-based system that reads light and temperature, then physically opens and closes the blinds — two-way Wi-Fi telemetry, motor driver, and control logic designed as a four-person team project.</p>
+          <p>ESP32-based system that reads light and temperature, then physically opens and closes the blinds — two-way Wi-Fi telemetry, motor driver, and a custom PCB laid out in Cadence. (<a href="https://egr314-team-305.github.io/Team305.github.io/" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">project site</a>)</p>
         </div>
         <div class="row-tags"><span><b>ESP32</b></span><span>IOT</span><span>2023</span></div>
       </div>
@@ -598,16 +631,22 @@ footer .shell{
     <h2 class="reveal">Fixing things since<br>the flip-phone era.</h2>
     <div class="about-grid">
       <div class="about-copy reveal">
-        <p>I started at fourteen, repairing cracked phones and dead laptops at a shop in Chinle, Arizona — five years of learning why electronics fail before I ever studied how they work. That instinct stuck: I still trust the oscilloscope over the datasheet's promises.</p>
-        <p>Now I do it professionally at Microchip, where my firmware and application examples ship to the engineers building on PIC MCUs. I finished my accelerated master's in engineering with a 4.0 while working full-time, and I'm happiest wherever hardware, firmware, and motion meet — motor control, robotics, and ML small enough to live on an 8-bit part.</p>
+        <p>I started at sixteen, repairing cracked phones and dead laptops at a shop in Chinle, Arizona — five years of learning why electronics fail before I ever studied how they work. That instinct stuck: I still trust the oscilloscope over the datasheet's promises.</p>
+        <p>Now I do it professionally at Microchip, where my firmware and application examples ship to the engineers building on PIC MCUs. I finished my accelerated master's in engineering with a 4.0 while working full-time, and my BS in Engineering Robotics Cum Laude with Dean's List honors across multiple semesters. I'm happiest wherever hardware, firmware, and motion meet — motor control, robotics, and ML small enough to live on an 8-bit part.</p>
       </div>
       <div class="stack reveal">
         <h4>Firmware &amp; silicon</h4>
         <ul><li>Embedded C</li><li>PIC18</li><li>PIC32</li><li>dsPIC</li><li>PSoC</li><li>ESP32</li></ul>
         <h4>Hardware</h4>
-        <ul><li>KiCad</li><li>PCB design</li><li>Oscilloscopes</li><li>Logic analyzers</li><li>Motor drives</li></ul>
+        <ul><li>KiCad</li><li>Cadence</li><li>PCB layout</li><li>Oscilloscopes</li><li>Logic analyzers</li><li>Motor drives</li></ul>
         <h4>Software &amp; modeling</h4>
-        <ul><li>Python</li><li>TinyML</li><li>Simulink</li><li>Git</li></ul>
+        <ul><li>Python</li><li>TinyML / Edge Impulse</li><li>Simulink</li><li>XENDEE</li><li>Git</li></ul>
+        <h4>Certifications</h4>
+        <ul>
+          <li>Universal Robots — Core / App / Pro Track</li>
+          <li>Simulink Fundamentals (MathWorks)</li>
+          <li>AZ Technical Skills Standards (Electrical Eng.)</li>
+        </ul>
       </div>
     </div>
   </div>
