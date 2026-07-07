@@ -405,7 +405,7 @@ footer .shell{
     <!-- featured: NASA Psyche -->
     <div class="featured">
       <div class="featured-fig reveal">
-        <svg viewBox="0 0 460 330" fill="none" aria-label="Technical elevation diagram of the Psyche lander prototype on a 36 degree slope">
+        <svg viewBox="0 0 460 330" fill="none" aria-label="Hephaestus lander: dodecahedral probe on a 36 degree slope">
           <!-- slope ground -->
           <path d="M20 300 L440 165" stroke="currentColor" stroke-width="1.5"/>
           <g stroke="currentColor" stroke-width="1" opacity=".45">
@@ -415,24 +415,112 @@ footer .shell{
           <path d="M20 300 H200" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity=".55"/>
           <path d="M110 300 A96 96 0 0 0 102 273" stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a"/>
           <text x="122" y="288" font-family="JetBrains Mono" font-size="12" fill="currentColor">36&#176;</text>
-          <!-- lander body -->
-          <g transform="translate(230 130) rotate(-17.8)">
-            <rect x="-64" y="-46" width="128" height="52" rx="5" stroke="currentColor" stroke-width="1.5"/>
-            <rect x="-46" y="-32" width="38" height="24" rx="2" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M14 -32 h30 M14 -24 h30 M14 -16 h30" stroke="currentColor" stroke-width="1.2"/>
-            <!-- antenna -->
-            <path d="M0 -46 V-78" stroke="currentColor" stroke-width="1.5"/>
-            <circle cx="0" cy="-84" r="5" stroke="var(--accent)" stroke-width="1.5"/>
-            <!-- legs -->
-            <path d="M-64 4 L-96 52 M64 4 L96 52 M-20 6 L-20 48" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M-106 54 h20 M86 54 h20 M-30 50 h20" stroke="var(--accent)" stroke-width="2.5"/>
-            <!-- rotation arc -->
-            <path d="M-30 -60 A34 34 0 0 1 30 -60" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>
-            <path d="M30 -60 l-7 -4 M30 -60 l-8 3" stroke="var(--accent)" stroke-width="1.5"/>
+          <!-- lander: dodecahedral probe with spherical underbelly, 3/4 view, sits on slope -->
+          <g transform="translate(230 170)">
+            <!-- shadow on slope -->
+            <ellipse cx="0" cy="120" rx="115" ry="14" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity=".4" fill="none"/>
+
+            <!-- dodecahedral body: top hexagonal cap + front pentagonal panel + right pentagonal panel + spherical underbelly -->
+            <g stroke="currentColor" stroke-width="1.5" fill="none">
+              <!-- spherical underbelly (lower curve) -->
+              <path d="M-105 38 C-115 78, -60 118, 0 118 C 60 118, 115 78, 105 38"/>
+              <!-- top hexagonal cap (foreshortened) -->
+              <path d="M-58 -90 L 0 -110 L 58 -90 L 78 -50 L 0 -28 L -78 -50 Z"/>
+              <!-- left pentagonal front face -->
+              <path d="M-78 -50 L -105 38 L 0 50 L 0 -28 Z"/>
+              <!-- right pentagonal front face -->
+              <path d="M78 -50 L 105 38 L 0 50 L 0 -28 Z"/>
+              <!-- back-right pentagonal face (slight perspective) -->
+              <path d="M78 -50 L 58 -90 L 0 -110 L 0 -28 Z" opacity=".7"/>
+              <!-- top-right back face -->
+              <path d="M58 -90 L 78 -50" opacity=".7"/>
+            </g>
+
+            <!-- door panel on left front face (with hinge) -->
+            <g stroke="currentColor" stroke-width="1" opacity=".85" fill="none">
+              <rect x="-70" y="-30" width="55" height="58" rx="1"/>
+              <!-- hinge marks (bottom) -->
+              <line x1="-65" y1="26" x2="-65" y2="30"/>
+              <line x1="-55" y1="26" x2="-55" y2="30"/>
+              <line x1="-45" y1="26" x2="-45" y2="30"/>
+              <line x1="-35" y1="26" x2="-35" y2="30"/>
+              <line x1="-25" y1="26" x2="-25" y2="30"/>
+              <line x1="-20" y1="26" x2="-20" y2="30"/>
+            </g>
+
+            <!-- door panel on right front face -->
+            <g stroke="currentColor" stroke-width="1" opacity=".85" fill="none">
+              <rect x="15" y="-30" width="55" height="58" rx="1"/>
+              <!-- hinge marks -->
+              <line x1="20" y1="26" x2="20" y2="30"/>
+              <line x1="30" y1="26" x2="30" y2="30"/>
+              <line x1="40" y1="26" x2="40" y2="30"/>
+              <line x1="50" y1="26" x2="50" y2="30"/>
+              <line x1="60" y1="26" x2="60" y2="30"/>
+              <line x1="65" y1="26" x2="65" y2="30"/>
+            </g>
+
+            <!-- rivets / fasteners along panel edges -->
+            <g fill="currentColor" opacity=".85">
+              <!-- top hex perimeter -->
+              <circle cx="-39" cy="-98" r="1.5"/>
+              <circle cx="-20" cy="-105" r="1.5"/>
+              <circle cx="0" cy="-107" r="1.5"/>
+              <circle cx="20" cy="-105" r="1.5"/>
+              <circle cx="39" cy="-98" r="1.5"/>
+              <circle cx="55" cy="-87" r="1.5"/>
+              <circle cx="65" cy="-72" r="1.5"/>
+              <circle cx="0" cy="-31" r="1.5"/>
+              <circle cx="-77" cy="-50" r="1.5"/>
+              <circle cx="77" cy="-50" r="1.5"/>
+              <!-- left face edges -->
+              <circle cx="-99" cy="-23" r="1.5"/>
+              <circle cx="-103" cy="0" r="1.5"/>
+              <circle cx="-105" cy="20" r="1.5"/>
+              <!-- right face edges -->
+              <circle cx="99" cy="-23" r="1.5"/>
+              <circle cx="103" cy="0" r="1.5"/>
+              <circle cx="105" cy="20" r="1.5"/>
+              <!-- spherical underbelly -->
+              <circle cx="-90" cy="55" r="1.5"/>
+              <circle cx="-72" cy="78" r="1.5"/>
+              <circle cx="-50" cy="98" r="1.5"/>
+              <circle cx="-25" cy="112" r="1.5"/>
+              <circle cx="0" cy="116" r="1.5"/>
+              <circle cx="25" cy="112" r="1.5"/>
+              <circle cx="50" cy="98" r="1.5"/>
+              <circle cx="72" cy="78" r="1.5"/>
+              <circle cx="90" cy="55" r="1.5"/>
+            </g>
+
+            <!-- sensor port cluster on top face -->
+            <g fill="currentColor" opacity=".7">
+              <circle cx="-15" cy="-78" r="1.8"/>
+              <circle cx="-7" cy="-78" r="1.8"/>
+              <circle cx="1" cy="-78" r="1.8"/>
+              <circle cx="9" cy="-78" r="1.8"/>
+              <circle cx="-7" cy="-70" r="1.8"/>
+              <circle cx="1" cy="-70" r="1.8"/>
+            </g>
+
+            <!-- small PCB indicator (Uriah's electronics) on right face -->
+            <g stroke="var(--accent)" stroke-width="1" fill="none" class="stroke-a">
+              <rect x="35" y="0" width="22" height="14" rx="1"/>
+              <line x1="38" y1="3" x2="48" y2="3"/>
+              <line x1="38" y1="6" x2="54" y2="6"/>
+              <line x1="38" y1="9" x2="46" y2="9"/>
+              <line x1="38" y1="12" x2="50" y2="12"/>
+              <circle cx="52" cy="11" r="1" fill="var(--accent)"/>
+              <circle cx="48" cy="11" r="1" fill="var(--accent)"/>
+            </g>
+
+            <!-- contact point indicator (rotation reference) -->
+            <g stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a">
+              <path d="M-40 -130 A50 50 0 0 1 40 -130" stroke-dasharray="3 4"/>
+              <path d="M40 -130 l-8 -3 M40 -130 l-3 8"/>
+            </g>
+            <text x="50" y="-135" font-family="JetBrains Mono" font-size="11" fill="var(--accent)">&#177;2&#176;</text>
           </g>
-          <text x="292" y="52" font-family="JetBrains Mono" font-size="12" fill="var(--accent)">&#177;2&#176;</text>
-          <!-- centerline -->
-          <path d="M230 20 V120" stroke="currentColor" stroke-width="1" stroke-dasharray="2 6" opacity=".55"/>
         </svg>
         <div class="fig-cap"><span>FIG.01 — LANDER ELEVATION</span><span>HEPHAESTUS / 16-PSYCHE</span></div>
       </div>
