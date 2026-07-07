@@ -228,12 +228,15 @@ h2{
 /* ---------- project rows ---------- */
 .rows{margin-top:clamp(48px,8vh,80px);border-top:1px solid var(--line)}
 .row{
+  position:relative;
   display:grid;
   grid-template-columns:112px minmax(0,1fr) auto;
   gap:clamp(20px,3.5vw,44px);align-items:center;
   padding:clamp(22px,3.5vh,34px) 0;
   border-bottom:1px solid var(--line);
+  transition:background 200ms var(--ease-out);
 }
+.row:hover{background:color-mix(in oklch,var(--surface) 60%,transparent)}
 .row-fig{
   width:112px;height:88px;flex-shrink:0;
   background:var(--surface);border-radius:10px;
@@ -324,6 +327,114 @@ footer .shell{
   font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-2);
 }
 
+/* ---------- scroll progress (native CSS, animation-timeline:scroll) ---------- */
+.progress{
+  position:fixed;inset:0 0 auto 0;height:2px;z-index:60;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  transform:scaleX(0);transform-origin:0 50%;
+}
+/* ponytail: animation-timeline:scroll is native, no JS; browsers without it show nothing, no harm */
+@supports(animation-timeline:scroll()){
+  .progress{animation:prog 1s linear;animation-timeline:scroll(root)}
+  @keyframes prog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+}
+
+/* ---------- view transitions (native cross-fade between #home and #detail) ---------- */
+#home,#detail{view-transition-name:page}
+::view-transition-group(page){animation-duration:.35s}
+@view-transition{navigation:auto}
+
+/* ---------- detail pages ---------- */
+#detail{}
+.detail-hero{padding-top:120px;padding-bottom:48px;border-bottom:1px solid var(--line)}
+.back-link{
+  display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;
+  font-size:13px;color:var(--ink-2);margin-bottom:36px;
+  transition:color 150ms var(--ease-out);
+}
+.back-link:hover{color:var(--accent)}
+.back-link svg{width:14px;height:14px}
+.detail-label{
+  font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--accent);
+  margin-bottom:14px;letter-spacing:.04em;
+}
+h1.detail-title{
+  font-size:clamp(2.4rem,5.5vw,4rem);font-weight:750;
+  font-variation-settings:"wdth" 112;letter-spacing:-.025em;line-height:1;
+  text-wrap:balance;margin-bottom:16px;
+}
+.detail-meta{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:24px}
+.detail-meta span{
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--ink-2);
+}
+.detail-meta span b{color:var(--ink);font-weight:600}
+.detail-lead{
+  font-size:clamp(1.1rem,2vw,1.4rem);color:var(--ink-2);max-width:64ch;line-height:1.5;
+  text-wrap:pretty;margin-bottom:36px;
+}
+.split{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,4fr);gap:clamp(28px,5vw,64px)}
+.detail-toc{
+  position:sticky;top:90px;align-self:start;
+  font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-2);
+}
+.detail-toc a{display:block;padding:5px 0;transition:color 150ms var(--ease-out)}
+.detail-toc a:hover{color:var(--accent)}
+.detail-body h3{
+  font-size:1.55rem;font-weight:700;letter-spacing:-.015em;
+  margin-top:48px;margin-bottom:14px;scroll-margin-top:90px;
+}
+.detail-body h3:before{content:attr(data-n) "  ";color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:.7em;font-weight:500}
+.detail-body p{color:var(--ink-2);max-width:68ch;text-wrap:pretty;margin-bottom:16px}
+.detail-body ul{list-style:none;padding:0;margin:0 0 16px}
+.detail-body li{padding-left:18px;position:relative;color:var(--ink-2);margin-bottom:8px;text-wrap:pretty}
+.detail-body li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1.5px;background:var(--accent)}
+.detail-fig{
+  background:var(--surface);border-radius:14px;padding:clamp(20px,3vw,36px);
+  margin:36px 0;border:1px solid var(--line-strong);
+}
+.detail-fig svg{width:100%;height:auto;color:var(--ink-2)}
+.detail-fig .stroke-a{color:var(--accent)}
+.detail-fig figcaption{
+  font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-2);
+  margin-top:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.detail-specs{margin-top:36px;border-top:1px solid var(--line-strong)}
+.detail-specs div{
+  display:flex;justify-content:space-between;gap:16px;padding:11px 0;
+  border-bottom:1px solid var(--line);text-wrap:pretty;
+}
+.detail-specs dt{font-size:14px;color:var(--ink-2)}
+.detail-specs dd{font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:600;color:var(--accent);text-align:right}
+.detail-stack{display:flex;flex-wrap:wrap;gap:7px;margin-top:24px}
+.detail-stack span{
+  font-family:"JetBrains Mono",monospace;font-size:12px;
+  padding:5px 12px;border:1px solid var(--line-strong);border-radius:999px;color:var(--ink-2);
+}
+.detail-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:36px}
+.detail-links a{
+  display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);
+  border-bottom:1px solid var(--line-strong);padding-bottom:2px;
+  transition:color 150ms var(--ease-out),border-color 150ms var(--ease-out);
+}
+.detail-links a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* reveal stagger for detail children */
+.js #detail .reveal{opacity:0;transform:translateY(18px)}
+.js #detail .reveal.in{opacity:1;transform:none;transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+
+/* hover lift on row figures — image fades up */
+.row{cursor:pointer}
+.row:hover .row-fig svg{transform:translateY(-2px);transition:transform 200ms var(--ease-out)}
+
+/* stat counter */
+[data-count]{font-variant-numeric:tabular-nums}
+
+/* mobile detail */
+@media(max-width:880px){
+  .split{grid-template-columns:1fr;gap:24px}
+  .detail-toc{position:static;display:none}
+}
+
 /* ---------- responsive ---------- */
 @media(max-width:880px){
   .featured{grid-template-columns:1fr;gap:30px}
@@ -344,8 +455,10 @@ footer .shell{
 </head>
 <body>
 
+<div class="progress" aria-hidden="true"></div>
+
 <nav>
-  <a href="#hero" class="nav-name"><span class="pad">&#9679;</span> URIAH VILLA</a>
+  <a href="#" class="nav-name"><span class="pad">&#9679;</span> URIAH VILLA</a>
   <div class="nav-links">
     <a href="#work">Work</a>
     <a href="#experience">Experience</a>
@@ -396,7 +509,7 @@ footer .shell{
   </svg>
 </header>
 
-<main>
+<main id="home" class="view">
 <section id="work">
   <div class="shell">
     <h2 class="reveal">Work that survives contact<br>with the physical world.</h2>
@@ -525,17 +638,18 @@ footer .shell{
         <p class="role-line">EMBEDDED SYSTEM DESIGN LEAD &middot; 2024</p>
         <p>Team Hephaestus built a steel-and-aluminum lander with a spherical underbelly to handle 16-Psyche's unknown terrain. I led the electronics: a custom KiCad PCB carrying PIC and PSoC microcontrollers, motor drivers, and sensor conditioning — plus every line of firmware, from door latches to the Hall-effect rover positioning system.</p>
         <dl class="spec-list">
-          <div><dt>Rover rotation accuracy</dt><dd>&#177;2&#176;</dd></div>
-          <div><dt>Automated test cycles, zero faults</dt><dd>500+</dd></div>
-          <div><dt>Slope tested (criterion &gt;20&#176;)</dt><dd>36&#176;</dd></div>
+          <div><dt>Rover rotation accuracy</dt><dd><span data-count="2" data-suffix="&#176;">2&#176;</span></dd></div>
+          <div><dt>Automated test cycles, zero faults</dt><dd><span data-count="500" data-suffix="+">500+</span></dd></div>
+          <div><dt>Slope tested (criterion &gt;20&#176;)</dt><dd><span data-count="36" data-suffix="&#176;">36&#176;</span></dd></div>
           <div><dt>Board</dt><dd>KiCad &middot; PIC18 &middot; PSoC</dd></div>
         </dl>
+        <p style="margin-top:24px"><a class="link-plain" href="#detail/nasa-psyche">Read the full case study &rarr;</a></p>
       </div>
     </div>
 
     <!-- secondary projects: most recent first -->
     <div class="rows">
-      <div class="row reveal">
+      <div class="row reveal" data-href="#detail/microgrid">
         <div class="row-fig">
           <svg viewBox="0 0 84 64" fill="none" aria-label="Microgrid system diagram with PV panels, battery, generator, and hospital load">
             <rect x="6" y="8" width="26" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/>
@@ -554,7 +668,7 @@ footer .shell{
         <div class="row-tags"><span><b>XENDEE</b></span><span>POWER SYSTEMS</span><span>2025</span></div>
       </div>
 
-      <div class="row reveal">
+      <div class="row reveal" data-href="#detail/solarsense">
         <div class="row-fig" style="overflow:hidden;padding:0">
           <img src="EGR%20598%20SolarSPELL.jpeg" alt="SolarSENSE prototype showing LILYGO T-Higrow board and soil sensor" style="width:100%;height:100%;object-fit:cover">
         </div>
@@ -565,7 +679,7 @@ footer .shell{
         <div class="row-tags"><span><b>TINYML</b></span><span>8-BIT MCU</span><span>2025</span></div>
       </div>
 
-      <div class="row reveal">
+      <div class="row reveal" data-href="#detail/shadeshift">
         <div class="row-fig">
           <svg viewBox="0 0 84 64" fill="none" aria-label="Stylized glasses with electronics enclosure">
             <path d="M10 36 c0-16,12-24,24-24 c12,0,24,8,24,24" stroke="currentColor" stroke-width="1.5" fill="none"/>
@@ -636,7 +750,7 @@ footer .shell{
         <div class="row-tags"><span><b>C</b></span><span>KINEMATICS</span><span>2024</span></div>
       </div>
 
-      <div class="row reveal">
+      <div class="row reveal" data-href="#detail/room-weather">
         <div class="row-fig">
           <svg viewBox="0 0 84 64" fill="none" aria-label="Wireless sensor node with signal arcs and readings">
             <path d="M30 56 V26" stroke="currentColor" stroke-width="1.6"/>
@@ -755,6 +869,344 @@ footer .shell{
   </div>
 </footer>
 
+<!-- =================== PROJECT DETAIL PAGES =================== -->
+<article id="detail-nasa-psyche" class="page" hidden data-title="NASA Psyche — Landing System">
+  <div class="shell">
+    <div class="detail-hero">
+      <p class="back-link reveal"><a href="#" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back</a></p>
+      <p class="detail-label reveal">EGR 401/402 CAPSTONE &middot; TUNGSTEN / IRIDIUM CLASS</p>
+      <h1 class="detail-title reveal">Psyche Landing System<br>for Hypothesized Surfaces</h1>
+      <div class="detail-meta reveal">
+        <span><b>Role</b> Embedded System Design Lead</span>
+        <span><b>Team</b> Hephaestus &middot; ASU Polytechnic</span>
+        <span><b>Year</b> 2024</span>
+      </div>
+      <p class="detail-lead reveal">A proof-of-concept asteroid lander for 16-Psyche — a metal world with unknown, possibly steep terrain. I led the electronics: a custom KiCad PCB, every line of C firmware, and a Hall-effect positioning system for the rover inside.</p>
+    </div>
+
+    <div class="split">
+      <nav class="detail-toc reveal" aria-label="On this page">
+        <a href="#psyche-mission">01 Mission</a>
+        <a href="#psyche-build">02 The build</a>
+        <a href="#psyche-validate">03 Validation</a>
+        <a href="#psyche-stack">04 Stack</a>
+      </nav>
+      <div class="detail-body">
+        <h3 id="psyche-mission" data-n="01">The mission</h3>
+        <p class="reveal">NASA's Psyche mission targets asteroid 16-Psyche, suspected to be the exposed metallic core of a destroyed planetesimal. Because its surface is uncharacterized, the lander must handle steep slopes, hard impacts, and unknown friction — without knowing which it will face first.</p>
+        <p class="reveal">Team Hephaestus (four of us across mechanical systems and robotics) chose a steel-and-aluminum lander with a <b>spherical underbelly</b> to roll into a stable posture, plus eight outward-deploying doors that fold down as a wider footprint once landed. The doors release the rover inside.</p>
+
+        <figure class="detail-fig reveal">
+          <svg viewBox="0 0 460 330" fill="none" aria-label="Lander side elevation on a 20 degree slope with doors deployed">
+            <path d="M20 290 L440 150" stroke="currentColor" stroke-width="1.5"/>
+            <g stroke="currentColor" stroke-width="1" opacity=".45"><path d="M52 290 l-11 11M82 278 l-11 11M112 266 l-11 11M142 254 l-11 11M172 242 l-11 11M202 230 l-11 11M232 218 l-11 11M262 206 l-11 11M292 194 l-11 11M322 182 l-11 11M352 170 l-11 11M382 158 l-11 11M412 146 l-11 11"/></g>
+            <line x1="20" y1="290" x2="370" y2="290" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity=".4"/>
+            <path d="M345 290 A 50 50 0 0 0 332 240" stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a"/>
+            <text x="352" y="276" font-family="JetBrains Mono" font-size="11" fill="var(--accent)">20&#176;</text>
+            <g transform="translate(180 157) rotate(-20)">
+              <g stroke="currentColor" stroke-width="1.5" fill="none">
+                <path d="M-75 -82 L 75 -82 L 82 -72 L -82 -72 Z"/>
+                <line x1="-82" y1="-72" x2="-82" y2="6"/>
+                <line x1="82" y1="-72" x2="82" y2="6"/>
+                <path d="M-82 6 C -82 60, -48 76, 0 76 C 48 76, 82 60, 82 6"/>
+              </g>
+              <g stroke="currentColor" stroke-width="1" opacity=".45" stroke-dasharray="2 3"><line x1="-65" y1="-72" x2="-65" y2="40"/><line x1="-32" y1="-72" x2="-32" y2="58"/><line x1="0" y1="-72" x2="0" y2="68"/><line x1="32" y1="-72" x2="32" y2="58"/><line x1="65" y1="-72" x2="65" y2="40"/></g>
+              <ellipse cx="0" cy="14" rx="64" ry="5" stroke="currentColor" stroke-width="1" opacity=".55" fill="none"/>
+              <g stroke="currentColor" stroke-width="1.2" fill="none" opacity=".7"><rect x="-13" y="-2" width="26" height="13" rx="2"/><circle cx="-8" cy="13" r="3"/><circle cx="8" cy="13" r="3"/><line x1="0" y1="-2" x2="0" y2="-12"/><circle cx="0" cy="-14" r="1.8"/></g>
+              <g stroke="currentColor" stroke-width="1.5" fill="none"><path d="M-82 -2 L -148 50 L -152 64 L -94 22 Z"/><path d="M 82 -2 L 148 50 L 152 64 L 94 22 Z"/></g>
+              <circle cx="-120" cy="38" r="2.4" fill="var(--accent)" class="stroke-a"/>
+              <circle cx="120" cy="38" r="2.4" fill="var(--accent)" class="stroke-a"/>
+              <g fill="currentColor" opacity=".85"><circle cx="-79" cy="-66" r="1.1"/><circle cx="79" cy="-66" r="1.1"/><circle cx="-82" cy="-42" r="1.1"/><circle cx="82" cy="-42" r="1.1"/><circle cx="-82" cy="-18" r="1.1"/><circle cx="82" cy="-18" r="1.1"/><circle cx="-55" cy="-78" r="1.1"/><circle cx="-25" cy="-80" r="1.1"/><circle cx="0" cy="-80" r="1.1"/><circle cx="25" cy="-80" r="1.1"/><circle cx="55" cy="-78" r="1.1"/></g>
+              <g stroke="currentColor" stroke-width="1" fill="var(--bg)"><circle cx="-82" cy="-2" r="2.5"/><circle cx="82" cy="-2" r="2.5"/></g>
+              <circle cx="0" cy="76" r="3" fill="var(--accent)" class="stroke-a"/>
+              <text x="-12" y="88" font-family="JetBrains Mono" font-size="9" fill="var(--accent)">CC</text>
+              <g stroke="var(--accent)" stroke-width="1" fill="none" class="stroke-a" opacity=".7"><line x1="0" y1="20" x2="0" y2="50"/><line x1="0" y1="20" x2="-22" y2="2"/><line x1="0" y1="20" x2="22" y2="12"/></g>
+              <text x="4" y="58" font-family="JetBrains Mono" font-size="8.5" fill="var(--accent)">mg</text>
+              <text x="-30" y="6" font-family="JetBrains Mono" font-size="8.5" fill="var(--accent)">N</text>
+              <text x="24" y="18" font-family="JetBrains Mono" font-size="8.5" fill="var(--accent)">&#956;N</text>
+              <circle cx="0" cy="20" r="2.2" fill="var(--accent)" class="stroke-a"/>
+              <text x="6" y="22" font-family="JetBrains Mono" font-size="8.5" fill="var(--accent)">CG</text>
+              <path d="M-18 6 A 20 20 0 0 1 18 6" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 2" fill="none" class="stroke-a"/>
+              <text x="-4" y="3" font-family="JetBrains Mono" font-size="8.5" fill="var(--accent)">&#952;</text>
+            </g>
+          </svg>
+          <figcaption><span>FIG.01 &mdash; LANDER ELEVATION ON 20&#176; SLOPE</span><span>HEPHAESTUS / 16-PSYCHE</span></figcaption>
+        </figure>
+
+        <h3 id="psyche-build" data-n="02">My piece of it</h3>
+        <p class="reveal">All electronics, end to end. I drew the board in KiCad &mdash; a PIC18 and a PSoC, motor drivers for the door latches, and signal conditioning for the Hall-effect sensors that close the positioning loop on the rover. The mechanical team gave me a steel shell; everything that thinks or moves on command is my firmware.</p>
+        <ul class="reveal">
+          <li>Custom PCB in KiCad carrying PIC and PSoC microcontrollers, motor drivers, and sensor conditioning.</li>
+          <li>Wrote all firmware in embedded C &mdash; user input, door latch control, LED indicators, and positioning loops.</li>
+          <li>Hall-effect sensor positioning system that rotates the rover to six named destinations with &plusmn;2&#176; accuracy.</li>
+        </ul>
+
+        <h3 id="psyche-validate" data-n="03">Validation</h3>
+        <p class="reveal">The lander ran 500+ automated cycles of door-deploy / rover-rotate / latch-seal with zero recorded faults. Physically, we tested it on slopes up to 36&#176; &mdash; the criterion was greater than 20&#176;, so we came in well above. The Hall-based closed loop held its &plusmn;2&#176; the whole time.</p>
+        <dl class="detail-specs reveal">
+          <div><dt>Rover rotation accuracy</dt><dd>&plusmn;2&#176;</dd></div>
+          <div><dt>Automated cycles, zero faults</dt><dd>500+</dd></div>
+          <div><dt>Slope tested (criterion &gt;20&#176;)</dt><dd>36&#176;</dd></div>
+          <div><dt>Site</dt><dd>16-Psyche hypothesized surfaces</dd></div>
+          <div><dt>Mission partner</dt><dd>NASA Psyche &mdash; ASU Capstone</dd></div>
+        </dl>
+
+        <h3 id="psyche-stack" data-n="04">Stack</h3>
+        <div class="detail-stack reveal">
+          <span>KiCad</span><span>PIC18</span><span>PSoC</span><span>Embedded C</span><span>Hall-effect sensors</span><span>Motor drivers</span>
+        </div>
+        <div class="detail-links reveal">
+          <a href="https://psyche.ssl.berkeley.edu/get-involved/capstone-projects/capstone-projects-tungsten-class/landing-system-for-hypothesized-surfaces-asu-a/" target="_blank" rel="noopener noreferrer">Mission page &nearr;</a>
+          <a href="#" class="back-link">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article id="detail-solarsense" class="page" hidden data-title="SolarSENSE — Edge-AI Soil Sensing">
+  <div class="shell">
+    <div class="detail-hero">
+      <p class="back-link reveal"><a href="#" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back</a></p>
+      <p class="detail-label reveal">EGR 598 &middot; ASU SOLARSPELL INITIATIVE</p>
+      <h1 class="detail-title reveal">SolarSENSE<br>Edge-AI Soil Sensing</h1>
+      <div class="detail-meta reveal">
+        <span><b>Role</b> Team Lead &mdash; System Integration</span>
+        <span><b>Partner</b> SolarSPELL / Rwandan coffee farmers</span>
+        <span><b>Year</b> 2025</span>
+      </div>
+      <p class="detail-lead reveal">A standalone soil-health monitor that runs a TinyML model on an 8-bit MCU &mdash; no cloud, no SIM, no lab. Farmers in Rwanda read live soil conditions off a self-hosted WiFi dashboard from the field.</p>
+    </div>
+
+    <div class="split">
+      <nav class="detail-toc reveal">
+        <a href="#ss-problem">01 The problem</a>
+        <a href="#ss-role">02 My role</a>
+        <a href="#ss-build">03 The build</a>
+        <a href="#ss-result">04 Results</a>
+        <a href="#ss-stack">05 Stack</a>
+      </nav>
+      <div class="detail-body">
+        <h3 id="ss-problem" data-n="01">The problem</h3>
+        <p class="reveal">Rural coffee farmers in Rwanda have small hillside plots, no lab access, no internet, and nutrient-poor acidic soils. Decisions about irrigation and fertilizer end up being guesses. The team was asked for a tool that costs tens of dollars, asks for no training, and works where there is no router.</p>
+
+        <figure class="detail-fig reveal">
+          <img src="EGR%20598%20SolarSPELL.jpeg" alt="The LILYGO T-Higrow ESP32 board with soil sensors in soil during Innovation Showcase testing" style="width:100%;height:auto;border-radius:8px">
+          <figcaption><span>FIG.01 &mdash; LILYGO T-HIGROW + SENSORS</span><span>ASU INNOVATION SHOWCASE 2025</span></figcaption>
+        </figure>
+
+        <h3 id="ss-role" data-n="02">My role</h3>
+        <p class="reveal">I was the integration lead. The simpler part was the build: take a TinyML model trained in Edge Impulse and merge it with the LILYGO T-Higrow's existing ESP-DASH firmware so the board reads soil, runs the model, and serves a WiFi dashboard with the prediction &mdash; all from one chip.</p>
+        <p class="reveal">The harder part was the pivot. The Rwandan dataset had NPK (nitrogen, phosphorus, potassium). The board only carries moisture and salinity sensors. I led the retrain &mdash; throwing out NPK as a feature, switching to salinity+moisture inputs, and rebuilding the model around what the board could actually read in the field.</p>
+
+        <h3 id="ss-build" data-n="03">The build</h3>
+        <ul class="reveal">
+          <li>1,000-row Rwandan dataset cleaned and labeled into four actionable categories: Too Dry, Needs Fertilizer, At Risk, Healthy.</li>
+          <li>Decision-tree model in Edge Impulse, two features (normalized moisture + soil-health score) &mdash; small enough for 8-bit flash.</li>
+          <li>Edge Impulse C library merged with the board's ESP-DASH firmware in Arduino IDE. ESP32 then hosts its own WiFi hotspot and dashboard at <span class="mono">192.168.4.1</span> &mdash; phone connects, no internet needed.</li>
+        </ul>
+
+        <h3 id="ss-result" data-n="04">Results</h3>
+        <p class="reveal">Test split accuracy hit 94.4% on the held-out set. In real soil at the Innovation Showcase with four pots of known condition, the board called 9 of 10 readings correctly &mdash; misses were soil uniformity and probe placement, not the model.</p>
+        <dl class="detail-specs reveal">
+          <div><dt>Held-out accuracy</dt><dd>94.4%</dd></div>
+          <div><dt>Real-soil showcase accuracy</dt><dd>9 / 10</dd></div>
+          <div><dt>Inputs</dt><dd>Moisture, salinity (EC)</dd></div>
+          <div><dt>Outputs</dt><dd>Too Dry / Needs Fertilizer / At Risk / Healthy</dd></div>
+          <div><dt>Connectivity</dt><dd>Offline AP hotspot &middot; ESP-DASH</dd></div>
+        </dl>
+
+        <h3 id="ss-stack" data-n="05">Stack</h3>
+        <div class="detail-stack reveal">
+          <span>ESP32</span><span>LILYGO T-Higrow</span><span>TinyML</span><span>Edge Impulse</span><span>ESP-DASH</span><span>Arduino IDE</span><span>Python (data prep)</span>
+        </div>
+        <div class="detail-links reveal">
+          <a href="#" class="back-link">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article id="detail-shadeshift" class="page" hidden data-title="ShadeShift — Therapeutic Eyewear">
+  <div class="shell">
+    <div class="detail-hero">
+      <p class="back-link reveal"><a href="#" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back</a></p>
+      <p class="detail-label reveal">EGR 555 &middot; COLLABORATION WITH DIGNITY HEALTH</p>
+      <h1 class="detail-title reveal">ShadeShift<br>Therapeutic Eyewear</h1>
+      <div class="detail-meta reveal">
+        <span><b>Role</b> Team Lead</span>
+        <span><b>Partner</b> Barrow Neurological Institute / Dignity Health</span>
+        <span><b>Year</b> 2025</span>
+      </div>
+      <p class="detail-lead reveal">A 4-in-1 wearable for patients with photophobia, visual processing disorders, and recovering traumatic brain injuries. Tint, color, stroboscopic training, binasal occlusion &mdash; all on one pair of 3D-printed modular frames, driven by an external control module.</p>
+    </div>
+
+    <div class="split">
+      <nav class="detail-toc reveal">
+        <a href="#sh-need">01 The clinical need</a>
+        <a href="#sh-role">02 My role</a>
+        <a href="#sh-build">03 The build</a>
+        <a href="#sh-challenges">04 Design pivots</a>
+        <a href="#sh-stack">05 Stack</a>
+      </nav>
+      <div class="detail-body">
+        <h3 id="sh-need" data-n="01">The clinical need</h3>
+        <p class="reveal">Patients recovering from a TBI, neurosurgery, or chronic migraine often can't tolerate ordinary lighting. Static tinted sunglasses don't help much: the right lens changes minute by minute. Therapists also use stroboscopic training and binasal occlusion, but those are separate, ugly, clinic-only tools. Our stakeholders wanted one assistive device a patient would actually wear in public.</p>
+
+        <h3 id="sh-role" data-n="02">My role</h3>
+        <p class="reveal">Team lead &mdash; four engineers. I owned the project's direction, the clinical liaison with Dignity Health, and the two critical engineering pivots that kept the project on schedule. I also did the CAD and 3D-printed the modular snap-on frames.</p>
+
+        <h3 id="sh-build" data-n="03">The build</h3>
+        <ul class="reveal">
+          <li>3D-printed modular PLA frames with embedded magnets for clip-on tints, color filters, and binasal occlusion strips.</li>
+          <li>Electrochromic lenses driven by an ESP32 over PWM &mdash; user changes tint live with a button.</li>
+          <li>Polymer-dispersed liquid crystal (PDLC) film for fast, reliable stroboscopic visual training.</li>
+          <li>External enclosure carries the ESP32, battery, and controls &mdash; tethered to the frames by a thin cable.</li>
+        </ul>
+
+        <h3 id="sh-challenges" data-n="04">Design pivots I led</h3>
+        <p class="reveal">Two decisions saved the project. First: the onboard electronics made the glasses too heavy &mdash; I moved the controller and battery to an external enclosure, trading wire management for wearability. Second: our initial stroboscopic material, PNLC film, needed its controller reverse-engineered and was unreliable across temperature. I led the migration to PDLC film, which gave us fast, consistent switching at the duty cycles the therapy needs.</p>
+        <dl class="detail-specs reveal">
+          <div><dt>Therapeutic modes</dt><dd>4 (tint, color, strobe, binasal)</dd></div>
+          <div><dt>Lead time saved</dt><dd>Materials pivot PNLC &rarr; PDLC</dd></div>
+          <div><dt>Frame</dt><dd>PLA 3D-printed, magnetic clip-ons</dd></div>
+          <div><dt>Controller</dt><dd>ESP32 + external enclosure</dd></div>
+        </dl>
+
+        <h3 id="sh-stack" data-n="05">Stack</h3>
+        <div class="detail-stack reveal">
+          <span>ESP32</span><span>PWM</span><span>PDLC film</span><span>Electrochromic lenses</span><span>Tinkercad / 3D printing</span><span>Clinical stakeholder work</span>
+        </div>
+        <div class="detail-links reveal">
+          <a href="https://youtu.be/Cl6hf7lQr3M" target="_blank" rel="noopener noreferrer">Demo video &nearr;</a>
+          <a href="#" class="back-link">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article id="detail-microgrid" class="page" hidden data-title="Microgrid Design — Queen's Medical Center">
+  <div class="shell">
+    <div class="detail-hero">
+      <p class="back-link reveal"><a href="#" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back</a></p>
+      <p class="detail-label reveal">EGR 586 &middot; INDEPENDENT ANALYSIS</p>
+      <h1 class="detail-title reveal">Microgrid Design<br>for a Critical Facility Load</h1>
+      <div class="detail-meta reveal">
+        <span><b>Role</b> Sole author</span>
+        <span><b>Site</b> Queen's Medical Center, Honolulu</span>
+        <span><b>Year</b> 2025</span>
+      </div>
+      <p class="detail-lead reveal">A techno-economic microgrid design for a Level I Trauma Center in Honolulu. Solar PV, battery storage, and diesel generation sized for both economic dispatch and outage resilience &mdash; using XENDEE against the local utility's Time-of-Use tariff.</p>
+    </div>
+
+    <div class="split">
+      <nav class="detail-toc reveal">
+        <a href="#mg-site">01 The site</a>
+        <a href="#mg-approach">02 Approach</a>
+        <a href="#mg-result">03 The suspicious result</a>
+        <a href="#mg-redesign">04 The defensible redesign</a>
+        <a href="#mg-stack">05 Stack</a>
+      </nav>
+      <div class="detail-body">
+        <h3 id="mg-site" data-n="01">The site</h3>
+        <p class="reveal">Queen's Medical Center in Honolulu, the Level I Trauma Center for the Pacific basin. Failures during a tropical storm or outage are not an inconvenience &mdash; they cost lives. Hawaii's grid is also expensive and time-of-use tariffed, so the economic case for onsite generation is unusually clean.</p>
+
+        <h3 id="mg-approach" data-n="02">Approach</h3>
+        <p class="reveal">Built the model in XENDEE end-to-end alone: load profile for a Level I facility, local Hawaiian Electric tariff, Lazard-reported capital costs for PV / BESS / diesel, and Time-of-Use dispatch logic. Ran four scenarios &mdash; an economic Best Case, a Low Asset Cost case, a 100% Renewable mandate, and 1-day / 3-day / 2-week outage resilience scenarios.</p>
+
+        <h3 id="mg-result" data-n="03">The suspicious result</h3>
+        <p class="reveal">The Best Case was too good. It sailed through the 2-week outage with no added cost, no generator at all &mdash; just oversized PV and BESS. That does not match how real hospital roofs constrain physical space. I didn't accept the result.</p>
+
+        <h3 id="mg-redesign" data-n="04">The defensible redesign</h3>
+        <p class="reveal">I imposed realistic rooftop-area constraints on the PV and BESS, re-ran the optimizer, and got the answer a hospital facilities team would actually sign off on: a smaller renewable build that handles economic dispatch, with diesel generation sized for the multi-day outage cases the renewables can't cover alone. The defensible design is the one I'd ship to the client.</p>
+        <dl class="detail-specs reveal">
+          <div><dt>Tool</dt><dd>XENDEE</dd></div>
+          <div><dt>Scenarios run</dt><dd>Best / Low-cost / 100% RE / 1d / 3d / 2wk</dd></div>
+          <div><dt>Assets</dt><dd>PV + BESS + diesel</dd></div>
+          <div><dt>Constraint added</dt><dd>Rooftop area for PV and BESS</dd></div>
+        </dl>
+
+        <h3 id="mg-stack" data-n="05">Stack</h3>
+        <div class="detail-stack reveal">
+          <span>XENDEE</span><span>Load-profile analysis</span><span>TOU tariff modeling</span><span>NPV / LCOE</span><span>Hybrid dispatch logic</span>
+        </div>
+        <div class="detail-links reveal">
+          <a href="#" class="back-link">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article id="detail-room-weather" class="page" hidden data-title="Room Weather Control System">
+  <div class="shell">
+    <div class="detail-hero">
+      <p class="back-link reveal"><a href="#" aria-label="Back to home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Back</a></p>
+      <p class="detail-label reveal">EGR 314 &middot; TEAM 305</p>
+      <h1 class="detail-title reveal">Home Room<br>Weather Control System</h1>
+      <div class="detail-meta reveal">
+        <span><b>Role</b> Embedded System Design Lead</span>
+        <span><b>Team</b> 4 &mdash; Diego, Uriah, Jack, Nicholas</span>
+        <span><b>Year</b> 2023</span>
+      </div>
+      <p class="detail-lead reveal">Open and close the blinds for you. Reads light and temperature, drives a motor, talks over Wi-Fi &mdash; all on a custom board the team laid out in Cadence.</p>
+    </div>
+
+    <div class="split">
+      <nav class="detail-toc reveal">
+        <a href="#rw-idea">01 The idea</a>
+        <a href="#rw-build">02 The build</a>
+        <a href="#rw-team">03 Cross-team work</a>
+        <a href="#rw-stack">04 Stack</a>
+      </nav>
+      <div class="detail-body">
+        <h3 id="rw-idea" data-n="01">The idea</h3>
+        <p class="reveal">If it's too bright outside, close the blinds. If it's hot inside but cool outside, open them. The project brief required multiple sensors and two-way Wi-Fi communication; we picked a use case that turns that spec into something a real household would own &mdash; a small appliance that just keeps the room comfortable without a thermostat war.</p>
+
+        <h3 id="rw-build" data-n="02">The build</h3>
+        <ul class="reveal">
+          <li>Custom PCB laid out in Cadence: ESP32 module, I2C sensor inputs, motor driver, voltage regulation.</li>
+          <li>Embedded C firmware on a PIC18 via MPLAB X for sensor acquisition, I2C, motor control, and register-level performance optimization.</li>
+          <li>ESP32 programmed in Python for MQTT &mdash; remote monitoring and control over Wi-Fi, so a phone can open and close the blinds.</li>
+          <li>Lessons from this build fed directly into my NASA Psyche PCB work a semester later: pad sizing, header placement, and never trusting a single sensor reading.</li>
+        </ul>
+
+        <h3 id="rw-team" data-n="03">Cross-team work</h3>
+        <p class="reveal">Four-person team. I owned hardware development and led technical decision-making for the board, with three teammates focused on subsystem design, software, system verification, and the tabletop demo frame. Final result was a working prototype plus a fully documented project site.</p>
+        <dl class="detail-specs reveal">
+          <div><dt>Sensors</dt><dd>Light, temperature</dd></div>
+          <div><dt>Actuator</dt><dd>Motor driver + blinds motor</dd></div>
+          <div><dt>Comm</dt><dd>ESP32 + MQTT over Wi-Fi</dd></div>
+          <div><dt>MCU</dt><dd>PIC18 (MPLAB X, embedded C)</dd></div>
+          <div><dt>Board</dt><dd>Custom PCB in Cadence</dd></div>
+        </dl>
+
+        <h3 id="rw-stack" data-n="04">Stack</h3>
+        <div class="detail-stack reveal">
+          <span>ESP32</span><span>PIC18</span><span>MQTT</span><span>MPLAB X</span><span>Cadence</span><span>I2C</span><span>Embedded C</span><span>Python</span>
+        </div>
+        <div class="detail-links reveal">
+          <a href="https://egr314-team-305.github.io/Team305.github.io/" target="_blank" rel="noopener noreferrer">Project site &nearr;</a>
+          <a href="#" class="back-link">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+<!-- =================== /PROJECT DETAIL PAGES =================== -->
+
 <script>
 // theme: saved preference > system
 (function(){
@@ -770,18 +1222,93 @@ document.getElementById('themeToggle').addEventListener('click', function(){
   localStorage.setItem('theme', dark ? 'light' : 'dark');
 });
 
-// scroll reveal — progressive enhancement; hide only what's below the fold right now
-if ('IntersectionObserver' in window) {
-  var io = new IntersectionObserver(function(entries){
+// ponytail: reveal observer — observe once per element; detail-page reveal handled by route()
+var io;
+if ('IntersectionObserver' in window && !io) {
+  io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     });
   },{threshold:.08, rootMargin:'0px 0px -30px 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){
-    if (el.getBoundingClientRect().top > innerHeight){
-      el.classList.add('pre');
-      io.observe(el);
-    }
+}
+function observeReveals(root){
+  if (!io) return;
+  (root || document).querySelectorAll('.reveal:not(.in)').forEach(function(el){
+    if (el.getBoundingClientRect().top > innerHeight) el.classList.add('pre');
+    io.observe(el);
+  });
+}
+observeReveals();
+
+// ponytail: hash router for detail pages — ~12 lines, native back/forward via hashchange
+function route(){
+  var h = location.hash;
+  var home = document.getElementById('home');
+  var pages = document.querySelectorAll('article.page');
+  var m = h.match(/^#detail\/(.+)/);
+  var target = m ? document.getElementById('detail-' + m[1]) : null;
+  pages.forEach(function(p){ p.hidden = true; });
+  if (target) {
+    home.hidden = true;
+    target.hidden = false;
+    document.documentElement.dataset.title = document.documentElement.dataset.title || document.title; // ponytail: stash base title once
+    document.title = target.dataset.title + ' — Uriah Villa';
+    scrollTo(0,0);
+    // stagger-reveal detail children so the page arrival has weight
+    target.querySelectorAll('.reveal').forEach(function(el, i){
+      el.classList.remove('pre','in');
+      setTimeout(function(){ el.classList.add('in'); }, 60 * (i + 1));
+    });
+    document.body.classList.add('on-detail');
+  } else {
+    home.hidden = false;
+    if (document.documentElement.dataset.title) document.title = document.documentElement.dataset.title;
+    document.body.classList.remove('on-detail');
+  }
+}
+addEventListener('hashchange', route);
+// ponytail: defer route until DOM parsed (script is at end of body so DOM is ready)
+route();
+
+// ponytail: row click → route via data-href; one handler covers them all
+document.querySelectorAll('[data-href]').forEach(function(el){
+  el.addEventListener('click', function(e){
+    if (e.target.closest('a')) return; // ponytail: don't hijack inner links like the project-site anchor in room-weather
+    location.hash = el.dataset.href;
+  });
+});
+
+// stat counter — rAF from 0 to value when first visible
+function animateCount(el){
+  var end = +el.dataset.count;
+  var suffix = el.dataset.suffix || '';
+  var dur = 900;
+  var start = null;
+  function tick(ts){
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / dur, 1);
+    var eased = 1 - Math.pow(1 - p, 3); // ponytail: cubic ease-out, no easing lib
+    el.textContent = Math.round(eased * end) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+if ('IntersectionObserver' in window) {
+  var cio = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ animateCount(e.target); cio.unobserve(e.target); }
+    });
+  },{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(function(el){ cio.observe(el); });
+}
+
+// ponytail: hero parallax — tiny tilt on the PCB trace ornament, ~8 lines; decor only, no info lost if removed
+var pcb = document.querySelector('#hero .pcb');
+if (pcb && matchMedia('(hover:hover) and (pointer:fine)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+  addEventListener('mousemove', function(e){
+    var x = (e.clientX / innerWidth - .5) * 14;
+    var y = (e.clientY / innerHeight - .5) * 8;
+    pcb.style.transform = 'translate(' + x + 'px,' + y + 'px)';
   });
 }
 </script>
