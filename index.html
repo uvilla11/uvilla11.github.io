@@ -449,8 +449,27 @@ footer .shell{
       </div>
     </div>
 
-    <!-- secondary projects -->
+    <!-- secondary projects: most recent first -->
     <div class="rows">
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Microgrid system diagram with PV panels, battery, generator, and hospital load">
+            <rect x="6" y="8" width="26" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 18 l4-6 h8 l4 6" stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a"/>
+            <rect x="38" y="8" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M48 10 v10 M43 15 h10" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="48" y="32" width="26" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M61 34 v4 l-4 4 h8 l-4-4 v-4" stroke="var(--accent)" stroke-width="1.5" class="stroke-a"/>
+            <path d="M24 28 v28 h30 M54 48 v-8" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Microgrid Design — Queen's Medical Center</h3>
+          <p>Independent techno-economic analysis for a Level I Trauma Center in Honolulu. Modeled solar PV, battery storage, and diesel generation in XENDEE across 1-day to 2-week outage scenarios. Questioned over-optimistic initial results to produce a defensible, real-world design.</p>
+        </div>
+        <div class="row-tags"><span><b>XENDEE</b></span><span>POWER SYSTEMS</span><span>2025</span></div>
+      </div>
+
       <div class="row reveal">
         <div class="row-fig" style="overflow:hidden;padding:0">
           <img src="EGR%20598%20SolarSPELL.jpeg" alt="SolarSENSE prototype showing LILYGO T-Higrow board and soil sensor" style="width:100%;height:100%;object-fit:cover">
@@ -482,21 +501,21 @@ footer .shell{
 
       <div class="row reveal">
         <div class="row-fig">
-          <svg viewBox="0 0 84 64" fill="none" aria-label="Microgrid system diagram with PV panels, battery, generator, and hospital load">
-            <rect x="6" y="8" width="26" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M10 18 l4-6 h8 l4 6" stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a"/>
-            <rect x="38" y="8" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M48 10 v10 M43 15 h10" stroke="currentColor" stroke-width="1.5"/>
-            <rect x="48" y="32" width="26" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M61 34 v4 l-4 4 h8 l-4-4 v-4" stroke="var(--accent)" stroke-width="1.5" class="stroke-a"/>
-            <path d="M24 28 v28 h30 M54 48 v-8" stroke="currentColor" stroke-width="1.5"/>
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Scatter plot with fitted regression line">
+            <path d="M8 56 H78 M8 56 V8" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
+            <path d="M12 50 L74 16" stroke="var(--accent)" stroke-width="1.6" class="stroke-a"/>
+            <g fill="currentColor" opacity=".75">
+              <circle cx="18" cy="44" r="2.2"/><circle cx="28" cy="46" r="2.2"/><circle cx="34" cy="36" r="2.2"/>
+              <circle cx="44" cy="34" r="2.2"/><circle cx="52" cy="24" r="2.2"/><circle cx="60" cy="28" r="2.2"/>
+              <circle cx="68" cy="18" r="2.2"/>
+            </g>
           </svg>
         </div>
         <div>
-          <h3>Microgrid Design — Queen's Medical Center</h3>
-          <p>Independent techno-economic analysis for a Level I Trauma Center in Honolulu. Modeled solar PV, battery storage, and diesel generation in XENDEE across 1-day to 2-week outage scenarios. Questioned over-optimistic initial results to produce a defensible, real-world design.</p>
+          <h3>Support Forecasting &amp; Automation</h3>
+          <p>Python pipeline over Salesforce data that cut weekly reporting by 10+ hours, plus an ML model estimating case complexity — support engineers saw escalations resolve 20% faster.</p>
         </div>
-        <div class="row-tags"><span><b>XENDEE</b></span><span>POWER SYSTEMS</span><span>2025</span></div>
+        <div class="row-tags"><span><b>PYTHON</b></span><span>ML</span><span>2024–25</span></div>
       </div>
 
       <div class="row reveal">
@@ -513,7 +532,7 @@ footer .shell{
           <h3>BLDC Motor Control</h3>
           <p>Sensored brushless motor drive on a dsPIC33EP256MC506 — commutation firmware brought up and validated the honest way: oscilloscopes, logic analyzers, and function generators on the bench at Microchip.</p>
         </div>
-        <div class="row-tags"><span><b>dsPIC33</b></span><span>MOTOR CONTROL</span><span>2024</span></div>
+        <div class="row-tags"><span><b>dsPIC33</b></span><span>MOTOR CONTROL</span><span>2023–24</span></div>
       </div>
 
       <div class="row reveal">
@@ -547,26 +566,7 @@ footer .shell{
           <h3>Room Weather Control</h3>
           <p>ESP32-based system that reads light and temperature, then physically opens and closes the blinds — two-way Wi-Fi telemetry, motor driver, and a custom PCB laid out in Cadence. (<a href="https://egr314-team-305.github.io/Team305.github.io/" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">project site</a>)</p>
         </div>
-        <div class="row-tags"><span><b>ESP32</b></span><span>IOT</span><span>2023</span></div>
-      </div>
-
-      <div class="row reveal">
-        <div class="row-fig">
-          <svg viewBox="0 0 84 64" fill="none" aria-label="Scatter plot with fitted regression line">
-            <path d="M8 56 H78 M8 56 V8" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
-            <path d="M12 50 L74 16" stroke="var(--accent)" stroke-width="1.6" class="stroke-a"/>
-            <g fill="currentColor" opacity=".75">
-              <circle cx="18" cy="44" r="2.2"/><circle cx="28" cy="46" r="2.2"/><circle cx="34" cy="36" r="2.2"/>
-              <circle cx="44" cy="34" r="2.2"/><circle cx="52" cy="24" r="2.2"/><circle cx="60" cy="28" r="2.2"/>
-              <circle cx="68" cy="18" r="2.2"/>
-            </g>
-          </svg>
-        </div>
-        <div>
-          <h3>Support Forecasting &amp; Automation</h3>
-          <p>Python pipeline over Salesforce data that cut weekly reporting by 10+ hours, plus an ML model estimating case complexity — support engineers saw escalations resolve 20% faster.</p>
-        </div>
-        <div class="row-tags"><span><b>PYTHON</b></span><span>ML</span><span>2024–25</span></div>
+        <div class="row-tags"><span><b>ESP32</b></span><span><b>IOT</b></span><span>2023</span></div>
       </div>
     </div>
   </div>
@@ -590,13 +590,13 @@ footer .shell{
         </div>
       </div>
       <div class="xp-item reveal">
-        <div class="xp-when"><b>2024</b>MESA, AZ</div>
+        <div class="xp-when"><b>2025 — 26</b>MESA, AZ</div>
         <div>
-          <div class="xp-org">NASA — Psyche Mission</div>
-          <div class="xp-title">Embedded System Design Lead, Capstone</div>
+          <div class="xp-org">Arizona State University</div>
+          <div class="xp-title">Student Services Coordinator Senior</div>
           <ul class="xp-body">
-            <li>Led end-to-end electronics for a prototype asteroid lander: custom PCB, motor drivers, sensor conditioning, and all system firmware.</li>
-            <li>Delivered a positioning system with &#177;2&#176; accuracy across 500+ automated cycles; lander verified on slopes up to 36&#176;.</li>
+            <li>Built a QR-code intake system for express advising — 70% less front-desk time, 20% more students seen.</li>
+            <li>MS Engineering (4.0, with Distinction) &middot; BS Engineering Robotics, Ira A. Fulton Schools of Engineering.</li>
           </ul>
         </div>
       </div>
@@ -612,13 +612,13 @@ footer .shell{
         </div>
       </div>
       <div class="xp-item reveal">
-        <div class="xp-when"><b>2023 — 26</b>MESA, AZ</div>
+        <div class="xp-when"><b>2024</b>MESA, AZ</div>
         <div>
-          <div class="xp-org">Arizona State University</div>
-          <div class="xp-title">Student Services Coordinator Senior</div>
+          <div class="xp-org">NASA — Psyche Mission</div>
+          <div class="xp-title">Embedded System Design Lead, Capstone</div>
           <ul class="xp-body">
-            <li>Built a QR-code intake system for express advising — 70% less front-desk time, 20% more students seen.</li>
-            <li>MS Engineering (4.0, with Distinction) &middot; BS Engineering Robotics, Ira A. Fulton Schools of Engineering.</li>
+            <li>Led end-to-end electronics for a prototype asteroid lander: custom PCB, motor drivers, sensor conditioning, and all system firmware.</li>
+            <li>Delivered a positioning system with &#177;2&#176; accuracy across 500+ automated cycles; lander verified on slopes up to 36&#176;.</li>
           </ul>
         </div>
       </div>
