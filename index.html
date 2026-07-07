@@ -435,6 +435,134 @@ h1.detail-title{
   .detail-toc{position:static;display:none}
 }
 
+/* ---------- all-out motion pass ---------- */
+
+/* Stronger custom easings (replaces earlier weak defaults where used in motion) */
+:root{
+  --ease-quart:cubic-bezier(.165,.84,.44,1);
+  --ease-quint:cubic-bezier(.22,1,.36,1);
+  --ease-expo:cubic-bezier(.16,1,.3,1);
+  --ease-back:cubic-bezier(.34,1.56,.64,1);
+}
+
+/* Magnetic wrapper: JS sets --mx/--my in px (translate distance) */
+.magnetic{display:inline-block;transition:transform 260ms var(--ease-quart)}
+.magnetic:active{transform:scale(.97)}
+.magnetic .mag-inner{display:inline-flex;transition:transform 260ms var(--ease-quart)}
+
+/* hero CTA: active press feedback */
+.hero-cta:active{transform:scale(.97)}
+
+/* link-plain active state */
+.link-plain:active{transform:translateY(1px)}
+
+/* project row: arrow + accent + figure zoom */
+.row-arrow{
+  grid-column:1 / -1;justify-self:end;align-self:center;
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent);
+  opacity:0;transform:translateX(-8px);transition:opacity 220ms var(--ease-quart),transform 220ms var(--ease-quart);
+}
+.row:hover .row-arrow{opacity:1;transform:translateX(0)}
+.row-fig{overflow:hidden;position:relative}
+.row-fig svg,.row-fig img{transition:transform 420ms var(--ease-quart)}
+.row:hover .row-fig svg,.row:hover .row-fig img{transform:scale(1.06)}
+.row::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  transform:scaleX(0);transform-origin:0 50%;transition:transform 320ms var(--ease-quart);
+}
+.row:hover::after{transform:scaleX(1)}
+
+/* row stagger entrance */
+.js .row.reveal.pre{opacity:0;transform:translateY(22px)}
+.js .row.reveal.in{opacity:1;transform:none;transition:opacity .6s var(--ease-quint),transform .6s var(--ease-quint)}
+
+/* experience: animated vertical timeline line (scroll-driven, native) */
+.xp{position:relative}
+.xp::before{
+  content:"";position:absolute;left:178px;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--accent),var(--accent-2),transparent);
+  transform:scaleY(0);transform-origin:0 0;
+}
+@supports(animation-timeline:scroll()){
+  #experience .xp::before{
+    transform-origin:0 0;
+    animation:timeline-grow 1s linear;
+    animation-timeline:var(--xp-tl,view());
+  }
+  @keyframes timeline-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+}
+
+/* lander scroll tilt: JS sets --tilt deg on .featured-fig */
+.featured-fig svg{transition:transform 200ms var(--ease-quart)}
+.featured-fig.contact-pulse circle:last-of-type{
+  animation:contactPulse 2.4s var(--ease-io) infinite;
+}
+@keyframes contactPulse{
+  0%,100%{r:3;opacity:1}
+  50%{r:5.5;opacity:.55}
+}
+
+/* custom cursor dot */
+.cursor-dot{
+  position:fixed;top:0;left:0;width:8px;height:8px;border-radius:50%;
+  background:var(--accent);pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);transition:width 220ms var(--ease-quart),height 220ms var(--ease-quart),background 220ms var(--ease-quart),opacity 220ms ease;
+  mix-blend-mode:difference;
+}
+.cursor-dot.grow{width:36px;height:36px;background:var(--accent-2)}
+@media(hover:none),(pointer:coarse){.cursor-dot{display:none}}
+
+/* detail TOC active link */
+.detail-toc a{position:relative;padding-left:14px;transition:color 200ms var(--ease-quart),padding-left 240ms var(--ease-quart)}
+.detail-toc a::before{
+  content:"";position:absolute;left:0;top:50%;width:0;height:1.5px;background:var(--accent);
+  transform:translateY(-50%);transition:width 240ms var(--ease-quart);
+}
+.detail-toc a.active{color:var(--accent);padding-left:18px}
+.detail-toc a.active::before{width:10px}
+
+/* detail reveal stagger refinement */
+#detail .reveal{opacity:0;transform:translateY(20px)}
+#detail .reveal.in{opacity:1;transform:none;transition:opacity .7s var(--ease-quint),transform .7s var(--ease-quint)}
+
+/* contact email: underline draw */
+.email-big{position:relative}
+.email-big::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:3px;
+  background:var(--accent);transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 420ms var(--ease-quart);
+}
+.email-big:hover::after{transform:scaleX(1)}
+
+/* nav link underline draw */
+.nav-links a:not(.keep){position:relative}
+.nav-links a:not(.keep)::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:1.5px;
+  background:var(--accent);transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 280ms var(--ease-quart);
+}
+.nav-links a:not(.keep):hover::after,.nav-links a:not(.keep):focus-visible::after{transform:scaleX(1)}
+
+/* skill chips: hover lift */
+.skill-chip{transition:transform 200ms var(--ease-quart),border-color 150ms ease,color 150ms ease}
+.skill-chip:hover{transform:translateY(-2px)}
+
+/* view transition page swap */
+#home,#detail{view-transition-name:page}
+::view-transition-group(page){animation-duration:.4s}
+::view-transition-old(page){animation:vt-out .4s var(--ease-quart) both}
+::view-transition-new(page){animation:vt-in .4s var(--ease-quart) both}
+@keyframes vt-out{to{opacity:0;transform:translateY(-12px) scale(.98)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(12px) scale(1.02)}}
+
+/* reduced motion: kill all movement, keep color/opacity */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .cursor-dot,.featured-fig.contact-pulse circle:last-of-type{animation:none}
+  .pcb{transform:none!important}
+}
+
 /* ---------- responsive ---------- */
 @media(max-width:880px){
   .featured{grid-template-columns:1fr;gap:30px}
@@ -454,6 +582,7 @@ h1.detail-title{
 </style>
 </head>
 <body>
+<div class="cursor-dot" id="cursor" aria-hidden="true"></div>
 
 <div class="progress" aria-hidden="true"></div>
 
@@ -477,8 +606,8 @@ h1.detail-title{
     <h1 class="rise">Embedded systems,<br>from <span class="accent">silicon</span> to motion.</h1>
     <p class="hero-sub rise">I design the boards, write the firmware, and make the machines move. Robotics engineer in Mesa, Arizona.</p>
     <div class="hero-actions rise">
-      <a href="#work" class="btn">See the work
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      <a href="#work" class="btn magnetic" data-magnetic><span class="mag-inner">See the work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
       </a>
       <a href="mailto:uvilla11@gmail.com" class="link-plain">uvilla11@gmail.com</a>
     </div>
@@ -1208,9 +1337,9 @@ h1.detail-title{
 <!-- =================== /PROJECT DETAIL PAGES =================== -->
 
 <script>
-// theme: saved preference > system
+// ===== theme =====
 (function(){
-  var q = new URLSearchParams(location.search).get('theme'); // ponytail: also used by headless screenshot QA
+  var q = new URLSearchParams(location.search).get('theme');
   var saved = q || localStorage.getItem('theme');
   var dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme:dark)').matches;
   if (dark) document.documentElement.setAttribute('data-theme','dark');
@@ -1222,9 +1351,12 @@ document.getElementById('themeToggle').addEventListener('click', function(){
   localStorage.setItem('theme', dark ? 'light' : 'dark');
 });
 
-// ponytail: reveal observer — observe once per element; detail-page reveal handled by route()
+var REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
+var HOVER  = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+// ===== reveal observer =====
 var io;
-if ('IntersectionObserver' in window && !io) {
+if ('IntersectionObserver' in window) {
   io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
@@ -1240,54 +1372,71 @@ function observeReveals(root){
 }
 observeReveals();
 
-// ponytail: hash router for detail pages — ~12 lines, native back/forward via hashchange
+// ===== hash router with view transitions =====
+var baseTitle = document.title;
 function route(){
   var h = location.hash;
   var home = document.getElementById('home');
   var pages = document.querySelectorAll('article.page');
   var m = h.match(/^#detail\/(.+)/);
   var target = m ? document.getElementById('detail-' + m[1]) : null;
-  pages.forEach(function(p){ p.hidden = true; });
-  if (target) {
-    home.hidden = true;
-    target.hidden = false;
-    document.documentElement.dataset.title = document.documentElement.dataset.title || document.title; // ponytail: stash base title once
-    document.title = target.dataset.title + ' — Uriah Villa';
-    scrollTo(0,0);
-    // stagger-reveal detail children so the page arrival has weight
-    target.querySelectorAll('.reveal').forEach(function(el, i){
-      el.classList.remove('pre','in');
-      setTimeout(function(){ el.classList.add('in'); }, 60 * (i + 1));
-    });
-    document.body.classList.add('on-detail');
+  var apply = function(){
+    pages.forEach(function(p){ p.hidden = true; });
+    if (target) {
+      home.hidden = true;
+      target.hidden = false;
+      document.title = target.dataset.title + ' — Uriah Villa';
+      scrollTo(0,0);
+      target.querySelectorAll('.reveal').forEach(function(el, i){
+        el.classList.remove('pre','in');
+        // stagger with cubic ease, capped so long pages don't feel slow
+        setTimeout(function(){ el.classList.add('in'); }, Math.min(60 * (i + 1), 600));
+      });
+      document.body.classList.add('on-detail');
+      observeToc(target);
+      observeReveals(target);
+    } else {
+      home.hidden = false;
+      document.title = baseTitle;
+      document.body.classList.remove('on-detail');
+    }
+  };
+  if (document.startViewTransition && !REDUCE) {
+    document.startViewTransition(apply);
   } else {
-    home.hidden = false;
-    if (document.documentElement.dataset.title) document.title = document.documentElement.dataset.title;
-    document.body.classList.remove('on-detail');
+    apply();
   }
 }
 addEventListener('hashchange', route);
-// ponytail: defer route until DOM parsed (script is at end of body so DOM is ready)
 route();
 
-// ponytail: row click → route via data-href; one handler covers them all
+// ===== row click → route =====
 document.querySelectorAll('[data-href]').forEach(function(el){
   el.addEventListener('click', function(e){
-    if (e.target.closest('a')) return; // ponytail: don't hijack inner links like the project-site anchor in room-weather
+    if (e.target.closest('a')) return;
     location.hash = el.dataset.href;
   });
 });
 
-// stat counter — rAF from 0 to value when first visible
+// inject arrow element into each row (one-time, no per-row HTML)
+document.querySelectorAll('.row[data-href]').forEach(function(row){
+  var arrow = document.createElement('span');
+  arrow.className = 'row-arrow';
+  arrow.textContent = '→';
+  arrow.setAttribute('aria-hidden','true');
+  row.appendChild(arrow);
+});
+
+// ===== stat counter =====
 function animateCount(el){
   var end = +el.dataset.count;
   var suffix = el.dataset.suffix || '';
-  var dur = 900;
+  var dur = 1100;
   var start = null;
   function tick(ts){
     if (!start) start = ts;
     var p = Math.min((ts - start) / dur, 1);
-    var eased = 1 - Math.pow(1 - p, 3); // ponytail: cubic ease-out, no easing lib
+    var eased = 1 - Math.pow(1 - p, 4); // ease-out-quart
     el.textContent = Math.round(eased * end) + suffix;
     if (p < 1) requestAnimationFrame(tick);
   }
@@ -1302,14 +1451,116 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('[data-count]').forEach(function(el){ cio.observe(el); });
 }
 
-// ponytail: hero parallax — tiny tilt on the PCB trace ornament, ~8 lines; decor only, no info lost if removed
+// ===== hero parallax (PCB trace ornament) =====
 var pcb = document.querySelector('#hero .pcb');
-if (pcb && matchMedia('(hover:hover) and (pointer:fine)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+if (pcb && HOVER && !REDUCE) {
+  var rafP = null, tx = 0, ty = 0;
   addEventListener('mousemove', function(e){
-    var x = (e.clientX / innerWidth - .5) * 14;
-    var y = (e.clientY / innerHeight - .5) * 8;
-    pcb.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    tx = (e.clientX / innerWidth - .5) * 16;
+    ty = (e.clientY / innerHeight - .5) * 10;
+    if (!rafP) rafP = requestAnimationFrame(function(){
+      pcb.style.transform = 'translate(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px)';
+      rafP = null;
+    });
   });
+}
+
+// ===== magnetic buttons =====
+if (HOVER && !REDUCE) {
+  document.querySelectorAll('[data-magnetic]').forEach(function(el){
+    var inner = el.querySelector('.mag-inner');
+    var strength = 0.28;
+    el.addEventListener('mousemove', function(e){
+      var r = el.getBoundingClientRect();
+      var mx = (e.clientX - (r.left + r.width/2)) * strength;
+      var my = (e.clientY - (r.top + r.height/2)) * strength;
+      el.style.transform = 'translate(' + mx.toFixed(1) + 'px,' + my.toFixed(1) + 'px)';
+      if (inner) inner.style.transform = 'translate(' + (mx*0.4).toFixed(1) + 'px,' + (my*0.4).toFixed(1) + 'px)';
+    });
+    el.addEventListener('mouseleave', function(){
+      el.style.transform = '';
+      if (inner) inner.style.transform = '';
+    });
+  });
+
+  // magnetic email in contact
+  var email = document.querySelector('.email-big');
+  if (email) {
+    var strength = 0.18;
+    email.addEventListener('mousemove', function(e){
+      var r = email.getBoundingClientRect();
+      var mx = (e.clientX - (r.left + r.width/2)) * strength;
+      var my = (e.clientY - (r.top + r.height/2)) * strength;
+      email.style.transform = 'translate(' + mx.toFixed(1) + 'px,' + my.toFixed(1) + 'px)';
+    });
+    email.addEventListener('mouseleave', function(){ email.style.transform = ''; });
+  }
+}
+
+// ===== lander scroll tilt =====
+var landerFig = document.querySelector('#work .featured-fig');
+if (landerFig && !REDUCE) {
+  var landerSvg = landerFig.querySelector('svg');
+  var rafL = null;
+  addEventListener('scroll', function(){
+    if (rafL) return;
+    rafL = requestAnimationFrame(function(){
+      rafL = null;
+      var r = landerFig.getBoundingClientRect();
+      var center = r.top + r.height/2;
+      var vh = innerHeight;
+      // -1 when above viewport, +1 when below, 0 at center
+      var rel = (center - vh/2) / (vh/2);
+      var tilt = Math.max(-1, Math.min(1, rel)) * -4; // max 4°
+      landerSvg.style.transform = 'rotate(' + tilt.toFixed(2) + 'deg)';
+    });
+  }, {passive:true});
+}
+
+// ===== custom cursor dot =====
+var cursor = document.getElementById('cursor');
+if (cursor && HOVER && !REDUCE) {
+  var cx = 0, cy = 0, tx = 0, ty = 0;
+  addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; });
+  function loop(){
+    cx += (tx - cx) * 0.22;
+    cy += (ty - cy) * 0.22;
+    cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  }
+  loop();
+  var growSel = 'a, button, .row[data-href], [data-magnetic], .email-big, .skill-chip, .detail-toc a';
+  document.addEventListener('mouseover', function(e){
+    if (e.target.closest(growSel)) cursor.classList.add('grow');
+  });
+  document.addEventListener('mouseout', function(e){
+    if (e.target.closest(growSel)) cursor.classList.remove('grow');
+  });
+} else if (cursor) {
+  cursor.style.display = 'none';
+}
+
+// ===== detail TOC active section tracking =====
+function observeToc(scope){
+  var toc = scope.querySelector('.detail-toc');
+  if (!toc || !('IntersectionObserver' in window)) return;
+  var links = toc.querySelectorAll('a');
+  var sections = [];
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    var sec = scope.querySelector('#' + CSS.escape(id));
+    if (sec) sections.push({a:a, sec:sec});
+  });
+  var tio = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
+        var match = sections.find(function(s){ return s.sec === e.target; });
+        if (match) match.a.classList.add('active');
+      }
+    });
+  },{root:null, rootMargin:'-45% 0px -50% 0px', threshold:0});
+  sections.forEach(function(s){ tio.observe(s.sec); });
 }
 </script>
 
