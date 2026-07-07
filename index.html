@@ -1,440 +1,592 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Uriah Villa</title>
+<title>Uriah Villa — Embedded Systems &amp; Robotics Engineer</title>
+<meta name="description" content="Uriah Villa — MCU Applications Engineer at Microchip Technology. Embedded systems, robotics, firmware, and the boards they run on.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%237c5cff' stroke-width='4'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%237c5cff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..800;1,62..125,300..800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
 :root{
-  --bg:#fff;
-  --bg-secondary:#fafafa;
-  --text:#111;
-  --text-secondary:#6b7280;
-  --border:#e5e7eb;
-  --blue:#3b82f6;
-  --purple:#8b5cf6;
-  --gradient:linear-gradient(135deg,#3b82f6,#8b5cf6);
-  --card-bg:#fff;
-  --nav-bg:rgba(255,255,255,.8);
-  --shadow:0 0 0 1px rgba(0,0,0,.06),0 2px 4px rgba(0,0,0,.04);
-  --shadow-hover:0 0 0 1px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08);
+  --bg:oklch(98.5% .002 264);
+  --surface:oklch(96% .008 270);
+  --ink:oklch(18% .02 270);
+  --ink-2:oklch(40% .03 270);
+  --accent:oklch(48% .23 280);
+  --accent-2:oklch(52% .2 255);
+  --line:oklch(89% .012 270);
+  --line-strong:oklch(80% .02 270);
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-io:cubic-bezier(.77,0,.175,1);
 }
 [data-theme=dark]{
-  --bg:#09090b;
-  --bg-secondary:#18181b;
-  --text:#fafafa;
-  --text-secondary:#a1a1aa;
-  --border:#27272a;
-  --card-bg:#18181b;
-  --nav-bg:rgba(9,9,11,.8);
-  --shadow:0 0 0 1px rgba(255,255,255,.06),0 2px 4px rgba(0,0,0,.2);
-  --shadow-hover:0 0 0 1px rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.4);
+  --bg:oklch(16% .018 278);
+  --surface:oklch(20.5% .022 278);
+  --ink:oklch(95% .01 270);
+  --ink-2:oklch(74% .02 270);
+  --accent:oklch(76% .13 282);
+  --accent-2:oklch(78% .11 250);
+  --line:oklch(29% .022 278);
+  --line-strong:oklch(38% .03 278);
 }
+
 html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+  font-family:"Archivo",system-ui,sans-serif;
+  font-variation-settings:"wdth" 100;
   background:var(--bg);
-  color:var(--text);
+  color:var(--ink);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
-  transition:background .3s,color .3s;
+  font-size:16px;
+  overflow-x:clip;
 }
+::selection{background:var(--accent);color:var(--bg)}
 a{color:inherit;text-decoration:none}
+.mono{font-family:"JetBrains Mono",monospace}
 
-/* nav */
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ---------- nav ---------- */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;inset:0 0 auto 0;z-index:50;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 max(24px,safe-area-inset-right);
-  height:56px;
-  background:var(--nav-bg);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  transition:background .3s,border-color .3s;
+  height:60px;padding:0 clamp(20px,4vw,44px);
+  background:color-mix(in oklch,var(--bg) 92%,transparent);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
 }
-.nav-links{display:flex;align-items:center;gap:24px}
-.nav-links a{font-size:13px;font-weight:500;color:var(--text-secondary);letter-spacing:.02em;transition:color .2s}
-.nav-links a:hover{color:var(--blue)}
-.nav-name{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.nav-name{
+  font-family:"JetBrains Mono",monospace;
+  font-size:13px;font-weight:600;letter-spacing:.04em;
+}
+.nav-name .pad{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:clamp(14px,2.5vw,30px)}
+.nav-links a{
+  font-size:14px;font-weight:500;color:var(--ink-2);
+  transition:color 150ms var(--ease-out);
+}
+.nav-links a:hover{color:var(--accent)}
 
 .theme-btn{
-  background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;
-  color:var(--text-secondary);transition:color .2s;display:flex;align-items:center;
+  background:none;border:1px solid var(--line);cursor:pointer;
+  width:34px;height:34px;border-radius:8px;
+  color:var(--ink-2);display:flex;align-items:center;justify-content:center;
+  transition:color 150ms var(--ease-out),border-color 150ms var(--ease-out),transform 160ms var(--ease-out);
 }
-.theme-btn:hover{color:var(--text)}
-.theme-btn svg{width:18px;height:18px}
-[data-theme=light] .theme-btn .sun{display:none}
+.theme-btn:hover{color:var(--ink);border-color:var(--line-strong)}
+.theme-btn:active{transform:scale(.94)}
+.theme-btn svg{width:16px;height:16px}
+:root:not([data-theme=dark]) .theme-btn .sun{display:none}
 [data-theme=dark] .theme-btn .moon{display:none}
 
-/* sections */
-section{padding:120px max(24px,safe-area-inset-right)}
-.section-inner{max-width:1080px;margin:0 auto}
-.section-label{
-  font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--blue);margin-bottom:12px;
-}
-.section-title{
-  font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.03em;
-  margin-bottom:16px;line-height:1.2;
-}
+/* ---------- shell ---------- */
+.shell{max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
 
-/* hero */
+/* ---------- hero ---------- */
 #hero{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding-top:56px;text-align:center;
+  min-height:clamp(620px,100svh,1000px);
+  display:flex;flex-direction:column;justify-content:center;
+  padding-top:60px;position:relative;overflow:hidden;
 }
-.hero-content{max-width:720px}
-.hero-greeting{font-size:15px;font-weight:500;color:var(--text-secondary);margin-bottom:16px}
-.hero-name{
-  font-size:clamp(36px,7vw,80px);font-weight:700;letter-spacing:-.04em;
-  line-height:1.05;margin-bottom:20px;
-  background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
+.hero-role{
+  font-family:"JetBrains Mono",monospace;
+  font-size:clamp(12px,1.3vw,14px);color:var(--ink-2);
+  margin-bottom:clamp(18px,3vh,28px);
 }
-.hero-tagline{
-  font-size:clamp(17px,2vw,22px);color:var(--text-secondary);line-height:1.5;
-  max-width:560px;margin:0 auto 36px;
+.hero-role b{color:var(--accent);font-weight:600}
+h1{
+  font-size:clamp(3rem,9vw,5.5rem);
+  font-weight:750;
+  font-variation-settings:"wdth" 112;
+  letter-spacing:-.025em;
+  line-height:.98;
+  text-wrap:balance;
+  margin-bottom:clamp(22px,3.5vh,34px);
 }
-.hero-cta{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:12px 28px;border-radius:100px;
-  background:var(--gradient);color:#fff;font-size:14px;font-weight:600;
-  transition:opacity .2s,transform .2s;
+h1 .accent{color:var(--accent)}
+.hero-sub{
+  font-size:clamp(1.05rem,1.8vw,1.3rem);
+  color:var(--ink-2);max-width:34ch;line-height:1.45;
+  margin-bottom:clamp(30px,5vh,46px);
+  text-wrap:pretty;
 }
-.hero-cta:hover{opacity:.9;transform:translateY(-1px)}
-.hero-cta svg{width:16px;height:16px}
+.hero-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--accent);color:var(--bg);
+  font-size:15px;font-weight:600;
+  padding:13px 26px;border-radius:10px;
+  transition:transform 160ms var(--ease-out),background 150ms var(--ease-out);
+}
+.btn:hover{background:var(--accent-2)}
+.btn:active{transform:scale(.97)}
+.btn svg{width:15px;height:15px}
+.link-plain{
+  font-size:15px;font-weight:500;color:var(--ink-2);
+  border-bottom:1px solid var(--line-strong);padding-bottom:2px;
+  transition:color 150ms var(--ease-out),border-color 150ms var(--ease-out);
+}
+.link-plain:hover{color:var(--accent);border-color:var(--accent)}
 
-/* projects */
-#projects{background:var(--bg-secondary);transition:background .3s}
-.project-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:24px;margin-top:48px;
+/* pcb trace band */
+.pcb{
+  position:absolute;right:calc(-1*clamp(0px,4vw,60px));bottom:0;
+  width:min(58vw,660px);height:auto;
+  color:var(--accent);opacity:.5;pointer-events:none;
 }
-.project-card{
-  background:var(--card-bg);border-radius:16px;overflow:hidden;
-  box-shadow:var(--shadow);transition:box-shadow .3s,transform .3s,background .3s;
-  cursor:pointer;
+[data-theme=dark] .pcb{opacity:.55}
+.pcb .trace{
+  stroke-dasharray:1200;stroke-dashoffset:0;
 }
-.project-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px)}
-.project-card-image{
-  aspect-ratio:16/10;background:var(--bg-secondary);
+@media(prefers-reduced-motion:no-preference){
+  .pcb .trace{animation:draw 1.6s var(--ease-out) both}
+  .pcb .trace:nth-child(2){animation-delay:.12s}
+  .pcb .trace:nth-child(3){animation-delay:.24s}
+  .pcb .trace:nth-child(4){animation-delay:.36s}
+  .pcb .trace:nth-child(5){animation-delay:.48s}
+  @keyframes draw{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+}
+
+/* hero entrance */
+@media(prefers-reduced-motion:no-preference){
+  .rise{animation:rise .6s var(--ease-out) both}
+  .rise:nth-child(2){animation-delay:70ms}
+  .rise:nth-child(3){animation-delay:140ms}
+  .rise:nth-child(4){animation-delay:210ms}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+}
+
+/* ---------- sections ---------- */
+section{padding-block:clamp(72px,12vh,132px)}
+h2{
+  font-size:clamp(1.9rem,4vw,2.9rem);
+  font-weight:700;letter-spacing:-.02em;line-height:1.1;
+  text-wrap:balance;
+}
+.h2-note{
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--ink-2);
+  margin-top:10px;
+}
+
+/* scroll reveal — content visible by default; JS hides only below-fold elements, then reveals */
+.reveal.pre{opacity:0;transform:translateY(18px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+@media(prefers-reduced-motion:reduce){
+  .reveal.pre{transform:none}
+  .reveal.in{transition:opacity .3s ease}
+}
+
+/* ---------- featured project ---------- */
+#work{border-top:1px solid var(--line)}
+.featured{
+  margin-top:clamp(40px,6vh,64px);
+  display:grid;grid-template-columns:minmax(0,5fr) minmax(0,4fr);
+  gap:clamp(32px,5vw,72px);align-items:center;
+}
+.featured-fig{
+  background:var(--surface);
+  border-radius:14px;
+  padding:clamp(20px,3vw,36px);
+}
+.featured-fig svg{width:100%;height:auto;display:block;color:var(--ink-2)}
+.featured-fig .stroke-a{color:var(--accent)}
+.fig-cap{
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-2);
+  margin-top:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.featured h3{
+  font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:700;letter-spacing:-.015em;
+  line-height:1.15;margin-bottom:6px;text-wrap:balance;
+}
+.featured .role-line{
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--accent);
+  margin-bottom:18px;
+}
+.featured p{color:var(--ink-2);max-width:52ch;text-wrap:pretty}
+.spec-list{
+  margin-top:26px;border-top:1px solid var(--line);
+}
+.spec-list div{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line);
+}
+.spec-list dt{font-size:14px;color:var(--ink-2)}
+.spec-list dd{
+  font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:600;
+  color:var(--accent);text-align:right;
+}
+
+/* ---------- project rows ---------- */
+.rows{margin-top:clamp(48px,8vh,80px);border-top:1px solid var(--line)}
+.row{
+  display:grid;
+  grid-template-columns:112px minmax(0,1fr) auto;
+  gap:clamp(20px,3.5vw,44px);align-items:center;
+  padding:clamp(22px,3.5vh,34px) 0;
+  border-bottom:1px solid var(--line);
+}
+.row-fig{
+  width:112px;height:88px;flex-shrink:0;
+  background:var(--surface);border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  color:var(--text-secondary);font-size:13px;font-weight:500;
-  overflow:hidden;
+  color:var(--ink-2);
 }
-.project-card-image img{width:100%;height:100%;object-fit:cover}
-.project-card-body{padding:24px}
-.project-card-title{font-size:18px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
-.project-card-desc{font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:16px}
-.project-tags{display:flex;flex-wrap:wrap;gap:6px}
-.project-tag{
-  padding:4px 10px;border-radius:100px;font-size:12px;font-weight:500;
-  background:var(--bg-secondary);color:var(--text-secondary);
-  transition:background .3s,color .3s;
+.row-fig svg{width:84px;height:64px}
+.row-fig .stroke-a{color:var(--accent)}
+.row h3{font-size:1.15rem;font-weight:650;letter-spacing:-.01em;margin-bottom:4px}
+.row p{font-size:14.5px;color:var(--ink-2);max-width:58ch;text-wrap:pretty}
+.row-tags{
+  display:flex;flex-direction:column;align-items:flex-end;gap:5px;
+}
+.row-tags span{
+  font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-2);
+}
+.row-tags span b{color:var(--accent);font-weight:600}
+
+/* ---------- experience ---------- */
+#experience{background:var(--surface)}
+.xp{margin-top:clamp(40px,6vh,60px);display:flex;flex-direction:column}
+.xp-item{
+  display:grid;grid-template-columns:180px minmax(0,1fr);
+  gap:clamp(18px,3vw,44px);
+  padding:clamp(26px,4vh,38px) 0;
+  border-top:1px solid var(--line-strong);
+}
+.xp-item:first-child{border-top:none;padding-top:0}
+.xp-when{
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink-2);
+  padding-top:5px;line-height:1.8;
+}
+.xp-when b{color:var(--accent);font-weight:600;display:block}
+.xp-org{font-size:1.2rem;font-weight:650;letter-spacing:-.01em}
+.xp-title{font-size:14.5px;color:var(--accent);font-weight:550;margin-bottom:12px}
+.xp-body{font-size:14.5px;color:var(--ink-2);max-width:62ch}
+.xp-body li{list-style:none;padding-left:18px;position:relative;margin-bottom:6px;text-wrap:pretty}
+.xp-body li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:7px;height:1.5px;background:var(--accent);
+}
+.xp-prior{
+  margin-top:14px;font-family:"JetBrains Mono",monospace;
+  font-size:12px;color:var(--ink-2);line-height:1.9;
 }
 
-/* experience */
-#experience .section-inner{max-width:800px}
-.experience-list{margin-top:48px;display:flex;flex-direction:column;gap:36px}
-.exp-item{display:flex;gap:20px}
-.exp-icon{
-  flex-shrink:0;width:44px;height:44px;border-radius:10px;
-  background:var(--bg-secondary);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:700;color:var(--blue);margin-top:2px;
+/* ---------- about ---------- */
+.about-grid{
+  margin-top:clamp(36px,5vh,54px);
+  display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);
+  gap:clamp(36px,6vw,88px);
 }
-.exp-content{flex:1}
-.exp-company{font-size:16px;font-weight:600;letter-spacing:-.01em}
-.exp-role{font-size:14px;color:var(--text-secondary);margin:2px 0 4px}
-.exp-date{font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:10px}
-.exp-desc{font-size:14px;color:var(--text-secondary);line-height:1.6}
-.exp-desc li{margin-left:18px;margin-bottom:4px}
-.exp-desc ul{list-style:none;padding:0}
-.exp-desc ul li::before{content:"– ";color:var(--blue)}
-.exp-sub{margin-top:16px;padding-left:64px;display:flex;flex-direction:column;gap:20px}
-@media(max-width:640px){
-  .exp-item{flex-direction:column;gap:12px}
-  .exp-sub{padding-left:0}
+.about-copy p{color:var(--ink-2);max-width:58ch;text-wrap:pretty}
+.about-copy p+p{margin-top:16px}
+.stack h4{
+  font-size:13px;font-weight:650;letter-spacing:.01em;
+  margin-bottom:10px;color:var(--ink);
+}
+.stack ul{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px}
+.stack li{
+  font-family:"JetBrains Mono",monospace;font-size:12px;
+  padding:5px 12px;border:1px solid var(--line-strong);border-radius:999px;
+  color:var(--ink-2);
 }
 
-/* about */
-#about .section-inner{max-width:720px}
-.about-text{font-size:clamp(15px,1.2vw,18px);color:var(--text-secondary);line-height:1.7}
-.about-text p+p{margin-top:16px}
-.skills-grid{
-  display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;
+/* ---------- contact ---------- */
+#contact{border-top:1px solid var(--line);text-align:left}
+.email-big{
+  display:inline-block;
+  font-size:clamp(1.6rem,5vw,3.4rem);
+  font-weight:700;letter-spacing:-.02em;
+  color:var(--accent);
+  margin:clamp(20px,3vh,30px) 0 clamp(28px,4vh,40px);
+  border-bottom:3px solid transparent;
+  transition:border-color 150ms var(--ease-out);
+  word-break:break-all;
 }
-.skill-chip{
-  padding:6px 16px;border-radius:100px;font-size:13px;font-weight:500;
-  border:1px solid var(--border);color:var(--text);transition:all .2s;
-}
-.skill-chip:hover{border-color:var(--blue);color:var(--blue)}
+.email-big:hover{border-color:var(--accent)}
+.contact-meta{display:flex;gap:28px;flex-wrap:wrap}
 
-/* contact */
-#contact{background:var(--bg-secondary);transition:background .3s}
-#contact .section-inner{max-width:720px;text-align:center}
-.contact-links{
-  display:flex;justify-content:center;gap:24px;margin-top:36px;
-  flex-wrap:wrap;
-}
-.contact-link{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:12px 24px;border-radius:12px;
-  border:1px solid var(--border);font-size:14px;font-weight:500;
-  transition:all .2s;color:var(--text);
-}
-.contact-link:hover{border-color:var(--blue);color:var(--blue);box-shadow:var(--shadow)}
-.contact-link svg{width:18px;height:18px}
-.contact-email{
-  display:inline-block;font-size:20px;font-weight:600;
-  background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;margin-top:12px;
-}
-
-/* footer */
+/* ---------- footer ---------- */
 footer{
-  padding:32px max(24px,safe-area-inset-right);text-align:center;
-  font-size:13px;color:var(--text-secondary);
-  border-top:1px solid var(--border);
-  transition:border-color .3s,color .3s;
+  border-top:1px solid var(--line);
+  padding:26px 0;
+}
+footer .shell{
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-2);
 }
 
-/* scroll reveal */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-/* mobile */
+/* ---------- responsive ---------- */
+@media(max-width:880px){
+  .featured{grid-template-columns:1fr;gap:30px}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .xp-item{grid-template-columns:1fr;gap:8px}
+  .xp-when{display:flex;gap:14px;align-items:baseline}
+  .xp-when b{display:inline}
+}
 @media(max-width:640px){
-  section{padding:80px 20px}
-  .nav-links a{display:none}
-  .project-grid{grid-template-columns:1fr}
-  .hero-name{font-size:clamp(32px,12vw,56px)}
-  .contact-links{flex-direction:column;align-items:center}
+  .nav-links a:not(.keep){display:none}
+  .row{grid-template-columns:72px minmax(0,1fr)}
+  .row-fig{width:72px;height:60px}
+  .row-fig svg{width:56px;height:44px}
+  .row-tags{display:none}
+  .pcb{width:88vw;opacity:.3}
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="#hero" class="nav-name">Uriah Villa</a>
+  <a href="#hero" class="nav-name"><span class="pad">&#9679;</span> URIAH VILLA</a>
   <div class="nav-links">
-    <a href="#projects">Projects</a>
+    <a href="#work">Work</a>
     <a href="#experience">Experience</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
-    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
-      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <button class="theme-btn keep" id="themeToggle" aria-label="Toggle color theme">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
       <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
   </div>
 </nav>
 
-<section id="hero">
-  <div class="hero-content">
-    <p class="hero-greeting">Hi, I'm</p>
-    <h1 class="hero-name">Uriah Villa</h1>
-    <p class="hero-tagline">Robotics engineer building embedded systems that bridge hardware and software. MS in Engineering with Distinction &mdash; 4.0 GPA.</p>
-    <a href="#projects" class="hero-cta">
-      View my work
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-    </a>
+<header id="hero">
+  <div class="shell">
+    <p class="hero-role rise">MCU APPLICATIONS ENGINEER II @ <b>MICROCHIP</b> &nbsp;/&nbsp; MS ENGINEERING, W/ DISTINCTION</p>
+    <h1 class="rise">Embedded systems,<br>from <span class="accent">silicon</span> to motion.</h1>
+    <p class="hero-sub rise">I design the boards, write the firmware, and make the machines move. Robotics engineer in Mesa, Arizona.</p>
+    <div class="hero-actions rise">
+      <a href="#work" class="btn">See the work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      </a>
+      <a href="mailto:uvilla11@gmail.com" class="link-plain">uvilla11@gmail.com</a>
+    </div>
   </div>
-</section>
+  <!-- PCB trace ornament -->
+  <svg class="pcb" viewBox="0 0 660 300" fill="none" aria-hidden="true">
+    <g stroke="currentColor" stroke-width="1.5">
+      <path class="trace" d="M0 260 H180 L230 210 H400 L450 260 H660"/>
+      <path class="trace" d="M0 220 H140 L200 160 H360 L420 220 H560 L610 170 H660"/>
+      <path class="trace" d="M40 300 V240 L90 190 H300 L350 140 H520"/>
+      <path class="trace" d="M0 180 H100 L160 120 H320 L370 70 H540 L590 120 H660"/>
+      <path class="trace" d="M240 300 V270 L290 220 H460 L510 170 V90 L560 40 H660"/>
+    </g>
+    <g fill="var(--bg)" stroke="currentColor" stroke-width="1.5">
+      <circle cx="180" cy="260" r="5"/><circle cx="400" cy="210" r="5"/>
+      <circle cx="140" cy="220" r="5"/><circle cx="360" cy="160" r="5"/>
+      <circle cx="300" cy="190" r="5"/><circle cx="520" cy="140" r="5"/>
+      <circle cx="320" cy="120" r="5"/><circle cx="540" cy="70" r="5"/>
+      <circle cx="460" cy="220" r="5"/><circle cx="510" cy="120" r="5"/>
+    </g>
+    <g fill="currentColor">
+      <circle cx="180" cy="260" r="1.8"/><circle cx="400" cy="210" r="1.8"/>
+      <circle cx="140" cy="220" r="1.8"/><circle cx="360" cy="160" r="1.8"/>
+      <circle cx="300" cy="190" r="1.8"/><circle cx="520" cy="140" r="1.8"/>
+      <circle cx="320" cy="120" r="1.8"/><circle cx="540" cy="70" r="1.8"/>
+      <circle cx="460" cy="220" r="1.8"/><circle cx="510" cy="120" r="1.8"/>
+    </g>
+  </svg>
+</header>
 
-<section id="projects">
-  <div class="section-inner">
-    <p class="section-label reveal">Projects</p>
-    <h2 class="section-title reveal">Selected work</h2>
-    <div class="project-grid">
-      <div class="project-card reveal">
-        <div class="project-card-image">Screenshot</div>
-        <div class="project-card-body">
-          <h3 class="project-card-title">NASA Psyche Landing System</h3>
-          <p class="project-card-desc">Proof-of-concept space-lander prototype for asteroid 16-Psyche. Custom PCB using KiCad with PIC and PSoC microcontrollers. Hall effect positioning system achieving &plusmn;2&deg; accuracy &mdash; 100% reliability over 500+ cycles. Designed to adapt to steep terrain, withstand impact forces, and deploy a robotic explorer.</p>
-          <div class="project-tags">
-            <span class="project-tag">KiCad</span>
-            <span class="project-tag">Embedded C</span>
-            <span class="project-tag">PIC18</span>
-            <span class="project-tag">PCB Design</span>
-          </div>
-        </div>
+<main>
+<section id="work">
+  <div class="shell">
+    <h2 class="reveal">Work that survives contact<br>with the physical world.</h2>
+    <p class="h2-note reveal">hardware &#215; firmware &#215; validation</p>
+
+    <!-- featured: NASA Psyche -->
+    <div class="featured">
+      <div class="featured-fig reveal">
+        <svg viewBox="0 0 460 330" fill="none" aria-label="Technical elevation diagram of the Psyche lander prototype on a 36 degree slope">
+          <!-- slope ground -->
+          <path d="M20 300 L440 165" stroke="currentColor" stroke-width="1.5"/>
+          <g stroke="currentColor" stroke-width="1" opacity=".45">
+            <path d="M50 300 l-14 14M95 286 l-14 14M140 271 l-14 14M185 257 l-14 14M230 242 l-14 14M275 228 l-14 14M320 213 l-14 14M365 199 l-14 14M410 184 l-14 14"/>
+          </g>
+          <!-- horizontal reference + angle -->
+          <path d="M20 300 H200" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5" opacity=".55"/>
+          <path d="M110 300 A96 96 0 0 0 102 273" stroke="var(--accent)" stroke-width="1.5" fill="none" class="stroke-a"/>
+          <text x="122" y="288" font-family="JetBrains Mono" font-size="12" fill="currentColor">36&#176;</text>
+          <!-- lander body -->
+          <g transform="translate(230 130) rotate(-17.8)">
+            <rect x="-64" y="-46" width="128" height="52" rx="5" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="-46" y="-32" width="38" height="24" rx="2" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M14 -32 h30 M14 -24 h30 M14 -16 h30" stroke="currentColor" stroke-width="1.2"/>
+            <!-- antenna -->
+            <path d="M0 -46 V-78" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="0" cy="-84" r="5" stroke="var(--accent)" stroke-width="1.5"/>
+            <!-- legs -->
+            <path d="M-64 4 L-96 52 M64 4 L96 52 M-20 6 L-20 48" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M-106 54 h20 M86 54 h20 M-30 50 h20" stroke="var(--accent)" stroke-width="2.5"/>
+            <!-- rotation arc -->
+            <path d="M-30 -60 A34 34 0 0 1 30 -60" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <path d="M30 -60 l-7 -4 M30 -60 l-8 3" stroke="var(--accent)" stroke-width="1.5"/>
+          </g>
+          <text x="292" y="52" font-family="JetBrains Mono" font-size="12" fill="var(--accent)">&#177;2&#176;</text>
+          <!-- centerline -->
+          <path d="M230 20 V120" stroke="currentColor" stroke-width="1" stroke-dasharray="2 6" opacity=".55"/>
+        </svg>
+        <div class="fig-cap"><span>FIG.01 — LANDER ELEVATION</span><span>HEPHAESTUS / 16-PSYCHE</span></div>
       </div>
-      <div class="project-card reveal">
-        <div class="project-card-image">Screenshot</div>
-        <div class="project-card-body">
-          <h3 class="project-card-title">SolarSENSE Edge-AI</h3>
-          <p class="project-card-desc">Led a team to develop a TinyML model on an 8-bit MCU for the ASU SolarSPELL Initiative, providing actionable soil health data to farmers in Rwanda. Presented at the Spring 2025 ASU Innovation Showcase.</p>
-          <div class="project-tags">
-            <span class="project-tag">TinyML</span>
-            <span class="project-tag">Embedded C</span>
-            <span class="project-tag">8-bit MCU</span>
-            <span class="project-tag">Edge AI</span>
-          </div>
-        </div>
+      <div class="reveal">
+        <h3>NASA Psyche — Landing System for Hypothesized Surfaces</h3>
+        <p class="role-line">EMBEDDED SYSTEM DESIGN LEAD &middot; 2024</p>
+        <p>Proof-of-concept asteroid lander for the unknown terrain of 16-Psyche. I led the electronics: a custom KiCad PCB carrying PIC and PSoC microcontrollers, motor drivers, and sensor conditioning — plus every line of firmware, from door latches to the Hall-effect rover positioning system.</p>
+        <dl class="spec-list">
+          <div><dt>Rover rotation accuracy</dt><dd>&#177;2&#176;</dd></div>
+          <div><dt>Automated test cycles, zero faults</dt><dd>500+</dd></div>
+          <div><dt>Slope tested (criterion &gt;20&#176;)</dt><dd>36&#176;</dd></div>
+          <div><dt>Board</dt><dd>KiCad &middot; PIC18 &middot; PSoC</dd></div>
+        </dl>
       </div>
-      <div class="project-card reveal">
-        <div class="project-card-image">Screenshot</div>
-        <div class="project-card-body">
-          <h3 class="project-card-title">SCARA Servo Arm</h3>
-          <p class="project-card-desc">Designed and built a robotic servo arm capable of drawing images using inverse kinematics. User inputs shape, size, and speed &mdash; the microprocessor calculates servo movements to reach drawing coordinates. Heavy C programming and kinematics work.</p>
-          <div class="project-tags">
-            <span class="project-tag">C</span>
-            <span class="project-tag">Robotics</span>
-            <span class="project-tag">Inverse Kinematics</span>
-            <span class="project-tag">Servo Control</span>
-          </div>
+    </div>
+
+    <!-- secondary projects -->
+    <div class="rows">
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Soil moisture sensor signal with ADC sample points">
+            <path d="M4 56 H80 M4 56 V6" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
+            <path d="M4 40 C14 40 16 22 26 22 C36 22 38 46 48 46 C58 46 60 14 70 14 L80 14" stroke="var(--accent)" stroke-width="1.6" class="stroke-a"/>
+            <g fill="var(--accent)"><circle cx="26" cy="22" r="2.4"/><circle cx="48" cy="46" r="2.4"/><circle cx="70" cy="14" r="2.4"/></g>
+          </svg>
         </div>
+        <div>
+          <h3>SolarSENSE — Edge-AI Soil Sensing</h3>
+          <p>Led the team that put a TinyML soil-health model on an 8-bit MCU for the ASU SolarSPELL Initiative — actionable readings for farmers in Rwanda, no cloud required. Shown at the Spring 2025 ASU Innovation Showcase.</p>
+        </div>
+        <div class="row-tags"><span><b>TINYML</b></span><span>8-BIT MCU</span><span>2025</span></div>
       </div>
-      <div class="project-card reveal">
-        <div class="project-card-image">Screenshot</div>
-        <div class="project-card-body">
-          <h3 class="project-card-title">BLDC Motor Control</h3>
-          <p class="project-card-desc">Developed a motor control project with a BLDC motor using a 16-bit MCU (dsPIC33EP256MC506). Heavy use of oscilloscopes, logic analyzers, power supplies, and function generators for validation.</p>
-          <div class="project-tags">
-            <span class="project-tag">dsPIC</span>
-            <span class="project-tag">Motor Control</span>
-            <span class="project-tag">Embedded C</span>
-            <span class="project-tag">BLDC</span>
-          </div>
+
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Three-phase trapezoidal commutation waveform">
+            <g stroke-width="1.6" fill="none">
+              <path d="M4 14 h12 l8 8 h20 l8 -8 h12 l8 8 h8" stroke="var(--accent)" class="stroke-a"/>
+              <path d="M4 32 l8 -8 h20 l8 8 h20 l8 -8 h12" stroke="currentColor" opacity=".75"/>
+              <path d="M4 50 h20 l8 -8 h20 l8 8 h20" stroke="currentColor" opacity=".45"/>
+            </g>
+          </svg>
         </div>
+        <div>
+          <h3>BLDC Motor Control</h3>
+          <p>Sensored brushless motor drive on a dsPIC33EP256MC506 — commutation firmware brought up and validated the honest way: oscilloscopes, logic analyzers, and function generators on the bench at Microchip.</p>
+        </div>
+        <div class="row-tags"><span><b>dsPIC33</b></span><span>MOTOR CONTROL</span><span>2024</span></div>
       </div>
-      <div class="project-card reveal">
-        <div class="project-card-image">Screenshot</div>
-        <div class="project-card-body">
-          <h3 class="project-card-title">Support Automation &amp; ML</h3>
-          <p class="project-card-desc">Automated Salesforce data analysis with Python, reducing reporting time by 10+ hours/week. Built a machine learning model to estimate case complexity, aiding engineers with forecasting support workflows.</p>
-          <div class="project-tags">
-            <span class="project-tag">Python</span>
-            <span class="project-tag">Machine Learning</span>
-            <span class="project-tag">Salesforce</span>
-            <span class="project-tag">JIRA</span>
-          </div>
+
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Two-link SCARA arm kinematic diagram">
+            <path d="M14 52 A38 38 0 0 1 76 40" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity=".5"/>
+            <path d="M14 52 L40 22 L68 36" stroke="var(--accent)" stroke-width="1.8" class="stroke-a"/>
+            <circle cx="14" cy="52" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <circle cx="40" cy="22" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <rect x="65" y="33" width="7" height="7" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+          </svg>
         </div>
+        <div>
+          <h3>SCARA Drawing Arm</h3>
+          <p>A two-link servo arm that draws user-specified shapes at chosen size and speed — inverse kinematics solved on the microprocessor in C. Built on an earlier vision-guided pick-and-place version.</p>
+        </div>
+        <div class="row-tags"><span><b>C</b></span><span>KINEMATICS</span><span>2024</span></div>
       </div>
-      <div class="project-card reveal">
-        <div class="project-card-image">Screenshot</div>
-        <div class="project-card-body">
-          <h3 class="project-card-title">Home Room Weather Control</h3>
-          <p class="project-card-desc">Built an IoT system using ESP32 WiFi communication that opens and closes window blinds based on light and temperature sensor data. Motor controller sets speed and direction based on environmental factors.</p>
-          <div class="project-tags">
-            <span class="project-tag">ESP32</span>
-            <span class="project-tag">Embedded Systems</span>
-            <span class="project-tag">IoT</span>
-            <span class="project-tag">C</span>
-          </div>
+
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Wireless sensor node with signal arcs and readings">
+            <path d="M30 56 V26" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="30" cy="22" r="3.5" stroke="var(--accent)" stroke-width="1.6" fill="none" class="stroke-a"/>
+            <path d="M40 14 a14 14 0 0 1 0 17 M47 8 a23 23 0 0 1 0 29" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+            <path d="M62 56 V40 M70 56 V32 M78 56 V46" stroke="currentColor" stroke-width="2.4" opacity=".7"/>
+            <path d="M14 56 H80" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
+          </svg>
         </div>
+        <div>
+          <h3>Room Weather Control</h3>
+          <p>ESP32-based system that reads light and temperature, then physically opens and closes the blinds — two-way Wi-Fi telemetry, motor driver, and control logic designed as a four-person team project.</p>
+        </div>
+        <div class="row-tags"><span><b>ESP32</b></span><span>IOT</span><span>2023</span></div>
+      </div>
+
+      <div class="row reveal">
+        <div class="row-fig">
+          <svg viewBox="0 0 84 64" fill="none" aria-label="Scatter plot with fitted regression line">
+            <path d="M8 56 H78 M8 56 V8" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
+            <path d="M12 50 L74 16" stroke="var(--accent)" stroke-width="1.6" class="stroke-a"/>
+            <g fill="currentColor" opacity=".75">
+              <circle cx="18" cy="44" r="2.2"/><circle cx="28" cy="46" r="2.2"/><circle cx="34" cy="36" r="2.2"/>
+              <circle cx="44" cy="34" r="2.2"/><circle cx="52" cy="24" r="2.2"/><circle cx="60" cy="28" r="2.2"/>
+              <circle cx="68" cy="18" r="2.2"/>
+            </g>
+          </svg>
+        </div>
+        <div>
+          <h3>Support Forecasting &amp; Automation</h3>
+          <p>Python pipeline over Salesforce data that cut weekly reporting by 10+ hours, plus an ML model estimating case complexity — support engineers saw escalations resolve 20% faster.</p>
+        </div>
+        <div class="row-tags"><span><b>PYTHON</b></span><span>ML</span><span>2024–25</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <section id="experience">
-  <div class="section-inner">
-    <p class="section-label reveal">Experience</p>
-    <h2 class="section-title reveal">Where I've worked</h2>
-    <div class="experience-list">
-      <div class="exp-item reveal">
-        <div class="exp-icon">M</div>
-        <div class="exp-content">
-          <div class="exp-company">Microchip Technology Inc.</div>
-          <div class="exp-role">Engineer II &mdash; MCU Applications NPD</div>
-          <div class="exp-date">Jan 2026 &ndash; Present &middot; Chandler, AZ</div>
-          <div class="exp-desc">
-            <ul>
-              <li>Manage project workflows and track engineering tasks using JIRA and Confluence.</li>
-              <li>Author technical documentation on 32-bit Low Power Optimizations and Techniques.</li>
-              <li>Maintain 10+ firmware solutions and customer-facing examples for 8-Bit and 32-Bit MCUs.</li>
-              <li>Collaborate cross-functionally to help customers adopt PIC32 MCU products.</li>
-            </ul>
-          </div>
-          <div class="exp-sub">
-            <div class="exp-item">
-              <div class="exp-content">
-                <div class="exp-role">MCU Applications Engineering Intern</div>
-                <div class="exp-date">May 2025 &ndash; Jan 2026 &middot; Chandler, AZ</div>
-                <div class="exp-desc">
-                  <ul>
-                    <li>Authored and maintained 5+ customer-facing application examples for PIC18 MCUs.</li>
-                    <li>Developed firmware solutions for customer evaluation boards.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="exp-item">
-              <div class="exp-content">
-                <div class="exp-role">Support Engagement Engineering Intern</div>
-                <div class="exp-date">Aug 2024 &ndash; May 2025 &middot; Chandler, AZ</div>
-                <div class="exp-desc">
-                  <ul>
-                    <li>Automated Salesforce data analysis with Python, reducing reporting time by 10+ hours/week.</li>
-                    <li>Built an ML model to estimate case complexity for forecasting support workflows.</li>
-                    <li>Streamlined escalation workflows by integrating Python automation with JIRA, accelerating resolution times by 20%.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="exp-item">
-              <div class="exp-content">
-                <div class="exp-role">Corporate Applications Engineering Intern</div>
-                <div class="exp-date">Aug 2023 &ndash; Aug 2024 &middot; Chandler, AZ</div>
-                <div class="exp-desc">
-                  <ul>
-                    <li>Resolved 100+ technical support cases for enterprise clients implementing Microchip products.</li>
-                    <li>Designed a BLDC motor control project using a dsPIC33EP256MC506.</li>
-                    <li>Automated diagnostic test suites for embedded systems firmware validation.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div class="shell">
+    <h2 class="reveal">Three years at the bench.</h2>
+    <div class="xp">
+      <div class="xp-item reveal">
+        <div class="xp-when"><b>2023 — NOW</b>CHANDLER, AZ</div>
+        <div>
+          <div class="xp-org">Microchip Technology</div>
+          <div class="xp-title">Engineer II, MCU Applications — New Product Development</div>
+          <ul class="xp-body">
+            <li>Author and maintain 10+ firmware solutions and customer-facing application examples across 8-bit and 32-bit MCU families.</li>
+            <li>Wrote the technical documentation for 32-bit low-power optimization techniques; documenting unreleased microcontroller products.</li>
+            <li>Work directly with customers adopting PIC32, alongside cross-functional silicon and tools teams.</li>
+          </ul>
+          <p class="xp-prior">PREVIOUSLY: MCU APPLICATIONS INTERN &rsaquo; SUPPORT ENGAGEMENT INTERN &rsaquo; CORPORATE APPLICATIONS INTERN</p>
         </div>
       </div>
-      <div class="exp-item reveal">
-        <div class="exp-icon">N</div>
-        <div class="exp-content">
-          <div class="exp-company">NASA &mdash; Psyche Mission</div>
-          <div class="exp-role">Embedded System Design Lead &middot; Capstone</div>
-          <div class="exp-date">Jan 2024 &ndash; Dec 2024 &middot; Mesa, AZ</div>
-          <div class="exp-desc">
-            <ul>
-              <li>Led end-to-end design of electronic and robotic systems for a prototype asteroid lander.</li>
-              <li>Created a custom PCB (KiCad) with PIC and PSoC microcontrollers for multi-surface landing testing.</li>
-              <li>Engineered a Hall effect sensor positioning system achieving &plusmn;2&deg; accuracy over 500+ cycles.</li>
-              <li>Physical testing on slopes up to 36&deg; exceeding the &gt;20&deg; success criterion.</li>
-            </ul>
-          </div>
+      <div class="xp-item reveal">
+        <div class="xp-when"><b>2024</b>MESA, AZ</div>
+        <div>
+          <div class="xp-org">NASA — Psyche Mission</div>
+          <div class="xp-title">Embedded System Design Lead, Capstone</div>
+          <ul class="xp-body">
+            <li>Led end-to-end electronics for a prototype asteroid lander: custom PCB, motor drivers, sensor conditioning, and all system firmware.</li>
+            <li>Delivered a positioning system with &#177;2&#176; accuracy across 500+ automated cycles; lander verified on slopes up to 36&#176;.</li>
+          </ul>
         </div>
       </div>
-      <div class="exp-item reveal">
-        <div class="exp-icon">S</div>
-        <div class="exp-content">
-          <div class="exp-company">ASU SolarSPELL Initiative</div>
-          <div class="exp-role">SolarSENSE Intern</div>
-          <div class="exp-date">Jan 2025 &ndash; May 2025 &middot; Mesa, AZ</div>
-          <div class="exp-desc">
-            <ul>
-              <li>Led a team to develop a TinyML model on an 8-bit MCU for soil health analysis for farmers in Rwanda.</li>
-              <li>Translated real-time sensor data into actionable agricultural insights.</li>
-              <li>Presented the Edge-AI model at the Spring 2025 ASU Innovation Showcase.</li>
-            </ul>
-          </div>
+      <div class="xp-item reveal">
+        <div class="xp-when"><b>2025</b>MESA, AZ</div>
+        <div>
+          <div class="xp-org">ASU SolarSPELL Initiative</div>
+          <div class="xp-title">SolarSENSE Intern</div>
+          <ul class="xp-body">
+            <li>Led development of a TinyML soil-health model running on an 8-bit MCU, translating live sensor data into guidance for small-scale farmers in Rwanda.</li>
+            <li>Presented the finished edge-AI system at the ASU Innovation Showcase.</li>
+          </ul>
         </div>
       </div>
-      <div class="exp-item reveal">
-        <div class="exp-icon">A</div>
-        <div class="exp-content">
-          <div class="exp-company">Arizona State University</div>
-          <div class="exp-role">Student Services Coordinator Senior</div>
-          <div class="exp-date">Feb 2025 &ndash; Jan 2026 &middot; Mesa, AZ</div>
-          <div class="exp-desc">
-            <ul>
-              <li>Optimized front desk operations using Salesforce and Microsoft Office Suite.</li>
-              <li>Built Google Apps solutions that cut student advising appointment time by 50%.</li>
-              <li>Created a QR code intake system reducing front desk resource time by 70% and increasing student visits by 20%.</li>
-            </ul>
-          </div>
+      <div class="xp-item reveal">
+        <div class="xp-when"><b>2023 — 26</b>MESA, AZ</div>
+        <div>
+          <div class="xp-org">Arizona State University</div>
+          <div class="xp-title">Student Services Coordinator Senior</div>
+          <ul class="xp-body">
+            <li>Built a QR-code intake system for express advising — 70% less front-desk time, 20% more students seen.</li>
+            <li>MS Engineering (4.0, with Distinction) &middot; BS Engineering Robotics, Ira A. Fulton Schools of Engineering.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -442,74 +594,73 @@ footer{
 </section>
 
 <section id="about">
-  <div class="section-inner">
-    <p class="section-label reveal">About</p>
-    <h2 class="section-title reveal">A bit about me</h2>
-    <div class="about-text reveal">
-      <p>Robotics engineer with a 4.0 GPA in an accelerated M.S. in Engineering program at Arizona State University. I currently work as an MCU Applications Engineer II at Microchip Technology, building firmware and application examples for 8-bit and 32-bit microcontrollers.</p>
-      <p>My experience spans embedded systems design, Python data analysis, TinyML on resource-constrained hardware, and PCB design with KiCad. I'm passionate about bridging hardware and software to build systems that work reliably in the real world.</p>
-    </div>
-    <div class="skills-grid reveal">
-      <span class="skill-chip">Embedded C</span>
-      <span class="skill-chip">Python</span>
-      <span class="skill-chip">PIC18 / PIC32</span>
-      <span class="skill-chip">dsPIC</span>
-      <span class="skill-chip">KiCad</span>
-      <span class="skill-chip">PCB Design</span>
-      <span class="skill-chip">Simulink</span>
-      <span class="skill-chip">TinyML</span>
-      <span class="skill-chip">Git</span>
-      <span class="skill-chip">JIRA</span>
+  <div class="shell">
+    <h2 class="reveal">Fixing things since<br>the flip-phone era.</h2>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>I started at fourteen, repairing cracked phones and dead laptops at a shop in Chinle, Arizona — five years of learning why electronics fail before I ever studied how they work. That instinct stuck: I still trust the oscilloscope over the datasheet's promises.</p>
+        <p>Now I do it professionally at Microchip, where my firmware and application examples ship to the engineers building on PIC MCUs. I finished my accelerated master's in engineering with a 4.0 while working full-time, and I'm happiest wherever hardware, firmware, and motion meet — motor control, robotics, and ML small enough to live on an 8-bit part.</p>
+      </div>
+      <div class="stack reveal">
+        <h4>Firmware &amp; silicon</h4>
+        <ul><li>Embedded C</li><li>PIC18</li><li>PIC32</li><li>dsPIC</li><li>PSoC</li><li>ESP32</li></ul>
+        <h4>Hardware</h4>
+        <ul><li>KiCad</li><li>PCB design</li><li>Oscilloscopes</li><li>Logic analyzers</li><li>Motor drives</li></ul>
+        <h4>Software &amp; modeling</h4>
+        <ul><li>Python</li><li>TinyML</li><li>Simulink</li><li>Git</li></ul>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="contact">
-  <div class="section-inner">
-    <p class="section-label reveal">Contact</p>
-    <h2 class="section-title reveal">Get in touch</h2>
-    <p class="about-text reveal" style="text-align:center">Have a project in mind or just want to say hi? I'd love to hear from you.</p>
-    <a href="mailto:uvilla11@gmail.com" class="contact-email reveal">uvilla11@gmail.com</a>
-    <div class="contact-links reveal">
-      <a href="https://github.com/uvilla11" class="contact-link" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        GitHub
-      </a>
-      <a href="https://www.linkedin.com/in/uriah-villa/" class="contact-link" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        LinkedIn
-      </a>
+  <div class="shell reveal">
+    <h2>Building something with<br>hardware in it? Say hello.</h2>
+    <a class="email-big" href="mailto:uvilla11@gmail.com">uvilla11@gmail.com</a>
+    <div class="contact-meta">
+      <a class="link-plain" href="https://github.com/uvilla11" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="link-plain" href="https://www.linkedin.com/in/uriah-villa/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
-  <p>&copy; 2026 Uriah Villa. Built with curiosity.</p>
+  <div class="shell">
+    <span>&#169; 2026 URIAH VILLA</span>
+    <span>MESA, AZ &middot; HAND-BUILT, NO FRAMEWORK</span>
+  </div>
 </footer>
 
 <script>
-// Theme
+// theme: saved preference > system
 (function(){
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const theme = saved || (prefersDark ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', theme);
+  var q = new URLSearchParams(location.search).get('theme'); // ponytail: also used by headless screenshot QA
+  var saved = q || localStorage.getItem('theme');
+  var dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+  if (dark) document.documentElement.setAttribute('data-theme','dark');
 })();
-
 document.getElementById('themeToggle').addEventListener('click', function(){
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
+  var el = document.documentElement;
+  var dark = el.getAttribute('data-theme') === 'dark';
+  if (dark) el.removeAttribute('data-theme'); else el.setAttribute('data-theme','dark');
+  localStorage.setItem('theme', dark ? 'light' : 'dark');
 });
 
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// scroll reveal — progressive enhancement; hide only what's below the fold right now
+if ('IntersectionObserver' in window) {
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:.08, rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){
+    if (el.getBoundingClientRect().top > innerHeight){
+      el.classList.add('pre');
+      io.observe(el);
+    }
+  });
+}
 </script>
 
 </body>
