@@ -435,6 +435,94 @@ h1.detail-title{
   .detail-toc{position:static;display:none}
 }
 
+/* ---------- continue: deep motion pass ---------- */
+
+/* hero ambient glow: drifts with mouse via JS --gx/--gy (0..1), fades in on load */
+#hero::before{
+  content:"";position:absolute;inset:-20%;z-index:0;pointer-events:none;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,35%), color-mix(in oklch,var(--accent) 16%,transparent) 0%, transparent 42%);
+  opacity:0;transition:opacity 1.4s var(--ease-quart);
+}
+#hero.loaded::before{opacity:1}
+#hero>*{position:relative;z-index:1}
+[data-theme=dark] #hero::before{
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,35%), color-mix(in oklch,var(--accent) 22%,transparent) 0%, transparent 46%);
+}
+
+/* word-by-word heading reveal: JS wraps words in <span class=hw>. CSS reveals via staggered translate. */
+.hw{display:inline-block;overflow:hidden;vertical-align:top}
+.hw > span{display:inline-block;transform:translateY(110%);transition:transform .8s var(--ease-expo)}
+.reveal.in .hw > span{transform:translateY(0)}
+/* stagger by word index (JS sets --i) */
+.reveal.in .hw > span{transition-delay:calc(var(--i,0) * 55ms)}
+
+/* featured figure clip-path wipe on reveal */
+.featured-fig.reveal{opacity:1}
+.js .featured-fig.reveal{clip-path:inset(0 0 100% 0);transform:translateY(10px)}
+.js .featured-fig.reveal.in{clip-path:inset(0 0 0% 0);transform:none;transition:clip-path 1s var(--ease-quint),transform 1s var(--ease-quint)}
+
+/* infinite marquee of stack */
+.marquee{
+  margin-top:clamp(36px,5vh,56px);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+}
+.marquee__track{
+  display:flex;gap:36px;padding:14px 0;width:max-content;
+  animation:marq 38s linear infinite;
+}
+.marquee:hover .marquee__track{animation-play-state:paused}
+.marquee__track span{
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--ink-2);
+  display:inline-flex;align-items:center;gap:14px;white-space:nowrap;
+}
+.marquee__track span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.marquee__track{animation:none;flex-wrap:wrap;width:auto}}
+
+/* about stack chips stagger on reveal */
+.stack ul{overflow:hidden}
+.stack li{
+  opacity:0;transform:translateY(14px) scale(.96);
+  transition:opacity .5s var(--ease-quart),transform .5s var(--ease-quart);
+}
+.stack.reveal.in li{opacity:1;transform:none}
+.stack.reveal.in li:nth-child(1){transition-delay:0ms}
+.stack.reveal.in li:nth-child(2){transition-delay:40ms}
+.stack.reveal.in li:nth-child(3){transition-delay:80ms}
+.stack.reveal.in li:nth-child(4){transition-delay:120ms}
+.stack.reveal.in li:nth-child(5){transition-delay:160ms}
+.stack.reveal.in li:nth-child(6){transition-delay:200ms}
+.stack.reveal.in li:nth-child(7){transition-delay:240ms}
+.stack.reveal.in li:nth-child(8){transition-delay:280ms}
+.stack li:hover{transform:translateY(-3px) scale(1.05);border-color:var(--accent);color:var(--accent)}
+
+/* contact ambient pulsing radial */
+#contact::before{
+  content:"";position:absolute;left:50%;top:38%;width:min(60vw,560px);height:min(60vw,560px);
+  transform:translate(-50%,-50%);pointer-events:none;z-index:0;
+  background:radial-gradient(circle, color-mix(in oklch,var(--accent) 12%,transparent) 0%, transparent 70%);
+  animation:contactPulse 6s var(--ease-io) infinite;
+}
+#contact{position:relative}
+#contact>*{position:relative;z-index:1}
+@keyframes contactPulse{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+
+/* detail page figure parallax (JS sets --py % translate) */
+.detail-fig svg,.detail-fig img{transform:translateY(var(--py,0));transition:transform 200ms var(--ease-quart)}
+
+/* pointer-aware cursor glow for the contact CTA wrap */
+#contact .shell{position:relative}
+#contact .shell::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;border-radius:24px;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), color-mix(in oklch,var(--accent) 10%,transparent) 0%, transparent 30%);
+  opacity:0;transition:opacity 300ms ease;
+}
+#contact .shell:hover::after{opacity:1}
+#contact .shell>*{position:relative;z-index:1}
+
 /* ---------- all-out motion pass ---------- */
 
 /* Stronger custom easings (replaces earlier weak defaults where used in motion) */
@@ -641,7 +729,7 @@ h1.detail-title{
 <main id="home" class="view">
 <section id="work">
   <div class="shell">
-    <h2 class="reveal">Work that survives contact<br>with the physical world.</h2>
+    <h2 class="reveal" data-words>Work that survives contact<br>with the physical world.</h2>
     <p class="h2-note reveal">hardware &#215; firmware &#215; validation</p>
 
     <!-- featured: NASA Psyche -->
@@ -899,9 +987,16 @@ h1.detail-title{
   </div>
 </section>
 
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Embedded C</span><span>PIC18 / PIC32 / dsPIC</span><span>KiCad</span><span>Cadence</span><span>PSoC Creator</span><span>ESP32 + MQTT</span><span>MPLAB X</span><span>Edge Impulse</span><span>TinyML</span><span>XENDEE</span><span>Simulink</span><span>Motor control</span><span>Hall-effect sensors</span><span>PCB layout</span><span>3D printing</span><span>Python</span><span>Git / Bitbucket</span><span>JIRA</span><span>Confluence</span><span>Salesforce</span>
+    <span>Embedded C</span><span>PIC18 / PIC32 / dsPIC</span><span>KiCad</span><span>Cadence</span><span>PSoC Creator</span><span>ESP32 + MQTT</span><span>MPLAB X</span><span>Edge Impulse</span><span>TinyML</span><span>XENDEE</span><span>Simulink</span><span>Motor control</span><span>Hall-effect sensors</span><span>PCB layout</span><span>3D printing</span><span>Python</span><span>Git / Bitbucket</span><span>JIRA</span><span>Confluence</span><span>Salesforce</span>
+  </div>
+</div>
+
 <section id="experience">
   <div class="shell">
-    <h2 class="reveal">Three years at the bench.</h2>
+    <h2 class="reveal" data-words>Three years at the bench.</h2>
     <div class="xp">
       <div class="xp-item reveal">
         <div class="xp-when"><b>2023 — NOW</b>CHANDLER, AZ</div>
@@ -955,7 +1050,7 @@ h1.detail-title{
 
 <section id="about">
   <div class="shell">
-    <h2 class="reveal">Fixing things since<br>the flip-phone era.</h2>
+    <h2 class="reveal" data-words>Fixing things since<br>the flip-phone era.</h2>
     <div class="about-grid">
       <div class="about-copy reveal">
         <p>I started at sixteen, repairing cracked phones and dead laptops at a shop in Chinle, Arizona — five years of learning why electronics fail before I ever studied how they work. That instinct stuck: I still trust the oscilloscope over the datasheet's promises.</p>
@@ -981,7 +1076,7 @@ h1.detail-title{
 
 <section id="contact">
   <div class="shell reveal">
-    <h2>Building something with<br>hardware in it? Say hello.</h2>
+    <h2 class="reveal" data-words>Building something with<br>hardware in it? Say hello.</h2>
     <a class="email-big" href="mailto:uvilla11@gmail.com">uvilla11@gmail.com</a>
     <div class="contact-meta">
       <a class="link-plain" href="https://github.com/uvilla11" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -1354,6 +1449,47 @@ document.getElementById('themeToggle').addEventListener('click', function(){
 var REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
 var HOVER  = matchMedia('(hover:hover) and (pointer:fine)').matches;
 
+// ===== word-by-word heading reveal wrap =====
+document.querySelectorAll('[data-words]').forEach(function(h){
+  // split on whitespace, keep <br> by walking nodes; wrap each text word
+  var out = '';
+  var i = 0;
+  function walk(nodes){
+    nodes.forEach(function(n){
+      if (n.nodeType === 3) {
+        n.textContent.split(/(\s+)/).forEach(function(w){
+          if (w.trim()) {
+            out += '<span class="hw"><span style="--i:' + (i++) + '">' + w + '</span></span> ';
+          } else {
+            out += w;
+          }
+        });
+      } else if (n.nodeName === 'BR') {
+        out += '<br>';
+      } else {
+        walk(n.childNodes);
+      }
+    });
+  }
+  walk(h.childNodes);
+  h.innerHTML = out;
+});
+
+// ===== hero loaded (drives ambient glow fade-in) =====
+requestAnimationFrame(function(){ document.getElementById('hero').classList.add('loaded'); });
+
+// ===== ambient glow + contact cursor-aware gradient: drive --gx/--gy from mouse =====
+function trackGlow(el){
+  if (!el || !HOVER || REDUCE) return;
+  el.addEventListener('mousemove', function(e){
+    var r = el.getBoundingClientRect();
+    el.style.setProperty('--gx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+    el.style.setProperty('--gy', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+  });
+}
+trackGlow(document.getElementById('hero'));
+trackGlow(document.querySelector('#contact .shell'));
+
 // ===== reveal observer =====
 var io;
 if ('IntersectionObserver' in window) {
@@ -1513,6 +1649,24 @@ if (landerFig && !REDUCE) {
       var rel = (center - vh/2) / (vh/2);
       var tilt = Math.max(-1, Math.min(1, rel)) * -4; // max 4°
       landerSvg.style.transform = 'rotate(' + tilt.toFixed(2) + 'deg)';
+    });
+  }, {passive:true});
+}
+
+// ===== detail figure parallax =====
+if (!REDUCE) {
+  var rafD = null;
+  addEventListener('scroll', function(){
+    if (rafD) return;
+    rafD = requestAnimationFrame(function(){
+      rafD = null;
+      document.querySelectorAll('article.page:not([hidden]) .detail-fig').forEach(function(fig){
+        var r = fig.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;
+        var rel = (r.top + r.height/2 - innerHeight/2) / innerHeight;
+        var py = Math.max(-1, Math.min(1, rel)) * 18; // ±18px
+        fig.style.setProperty('--py', py.toFixed(1) + 'px');
+      });
     });
   }, {passive:true});
 }
