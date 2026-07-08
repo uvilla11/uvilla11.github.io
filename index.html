@@ -430,6 +430,20 @@ h1.detail-title{
   transition:color 150ms var(--ease-out),border-color 150ms var(--ease-out);
 }
 .detail-links a:hover{color:var(--accent);border-color:var(--accent)}
+.detail-resources{margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}
+.detail-resources h3{font-size:1.55rem;font-weight:700;letter-spacing:-.015em;margin-bottom:6px;scroll-margin-top:90px}
+.detail-resources h3:before{content:attr(data-n) "  ";color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:.7em;font-weight:500}
+.detail-resources p{color:var(--ink-2);font-size:14px;max-width:62ch;margin-bottom:14px}
+.resource-list{display:flex;flex-direction:column;gap:8px;max-width:520px}
+.resource-list a{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line);
+  color:var(--ink);font-size:14px;
+  transition:color 150ms var(--ease-out),padding-left 240ms var(--ease-quart);
+}
+.resource-list a:hover{color:var(--accent);padding-left:8px}
+.resource-list a span:first-child{font-weight:600}
+.resource-list a span:last-child{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-2)}
 
 /* reveal stagger for detail children */
 .js #detail .reveal{opacity:0;transform:translateY(18px)}
@@ -926,7 +940,7 @@ h1.detail-title{
           <h3>ShadeShift — Therapeutic Eyewear</h3>
           <p>Team lead on a 4-in-1 smart eyewear system for TBI patients, in collaboration with Barrow Neurological Institute at Dignity Health. Custom 3D-printed frames with electrochromic tints, PDLC stroboscopic training, binasal occlusion, and magnetic color filters — all integrated with an external control module.</p>
         </div>
-        <div class="row-tags"><span><b>MECHATRONICS</b></span><span>3D PRINTING</span><span>2025</span></div>
+        <div class="row-tags"><span><b>PATENT-PENDING</b></span><span>MECHATRONICS</span><span>3D PRINTING</span><span>2025</span></div>
       </div>
 
       <div class="row reveal">
@@ -1096,6 +1110,7 @@ h1.detail-title{
     <div class="contact-meta">
       <a class="link-plain" href="https://github.com/uvilla11" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a class="link-plain" href="https://www.linkedin.com/in/uriah-villa/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="link-plain" href="Uriah%20Villa%20Simplified%20Resume%20No%20QR%20Code.md" target="_blank" rel="noopener noreferrer">Resume</a>
     </div>
   </div>
 </section>
@@ -1131,11 +1146,12 @@ h1.detail-title{
         <a href="#psyche-build">02 The build</a>
         <a href="#psyche-validate">03 Validation</a>
         <a href="#psyche-stack">04 Stack</a>
+        <a href="#psyche-resources">05 Resources</a>
       </nav>
       <div class="detail-body">
         <h2 id="psyche-mission" data-n="01">The mission</h2>
         <p class="reveal">NASA's Psyche mission targets asteroid 16-Psyche, suspected to be the exposed metallic core of a destroyed planetesimal. Because its surface is uncharacterized, the lander must handle steep slopes, hard impacts, and unknown friction — without knowing which it will face first.</p>
-        <p class="reveal">Team Hephaestus (four of us across mechanical systems and robotics) chose a steel-and-aluminum lander with a <b>spherical underbelly</b> to roll into a stable posture, plus eight outward-deploying doors that fold down as a wider footprint once landed. The doors release the rover inside.</p>
+        <p class="reveal">Team Hephaestus (four of us across mechanical systems and robotics) chose a steel-and-aluminum lander with a <b>spherical underbelly</b> &mdash; literally a salad bowl cut and repurposed as the base &mdash; to roll into a stable posture, plus eight outward-deploying doors that fold down as a wider footprint once landed. Inside, a Hall sensor indexed by six fixed magnets lets a rotating platform point the rover at any of the six doors, then send it out.</p>
 
         <figure class="detail-fig reveal">
           <svg viewBox="0 0 460 330" fill="none" aria-label="Lander side elevation on a 20 degree slope with doors deployed">
@@ -1174,6 +1190,11 @@ h1.detail-title{
           <figcaption><span>FIG.01 &mdash; LANDER ELEVATION ON 20&#176; SLOPE</span><span>HEPHAESTUS / 16-PSYCHE</span></figcaption>
         </figure>
 
+        <figure class="detail-fig detail-fig-poster reveal" style="padding:0;overflow:hidden">
+          <img src="psyche-poster.png" alt="Innovation Showcase poster for Team Hephaestus' Psyche landing system: build process, spherical base formation, exploded view, stress analysis, and the finished lander with all eight doors deployed showing the rotating rover platform inside." style="width:100%;height:auto;display:block">
+          <figcaption><span>FIG.02 &mdash; ASU INNOVATION SHOWCASE, SPRING 2025</span><span>TEAM HEPHAESTUS POSTER</span></figcaption>
+        </figure>
+
         <h2 id="psyche-build" data-n="02">My piece of it</h2>
         <p class="reveal">All electronics, end to end. I drew the board in KiCad &mdash; a PIC18 and a PSoC, motor drivers for the door latches, and signal conditioning for the Hall-effect sensors that close the positioning loop on the rover. The mechanical team gave me a steel shell; everything that thinks or moves on command is my firmware.</p>
         <ul class="reveal">
@@ -1183,12 +1204,13 @@ h1.detail-title{
         </ul>
 
         <h2 id="psyche-validate" data-n="03">Validation</h2>
-        <p class="reveal">The lander ran 500+ automated cycles of door-deploy / rover-rotate / latch-seal with zero recorded faults. Physically, we tested it on slopes up to 36&#176; &mdash; the criterion was greater than 20&#176;, so we came in well above. The Hall-based closed loop held its &plusmn;2&#176; the whole time.</p>
+        <p class="reveal">The lander ran 500+ automated cycles of door-deploy / rover-rotate / latch-seal with zero recorded faults. Physically, we tested it on slopes up to 36&#176; &mdash; the criterion was greater than 20&#176;, so we came in well above. The Hall-based closed loop held its &plusmn;2&#176; the whole time. Impact simulation (SolidWorks, titanium base) showed it could land at the mission's 2 m/s target with a safety factor above 2.7.</p>
         <dl class="detail-specs reveal">
           <div><dt>Rover rotation accuracy</dt><dd>&plusmn;2&#176;</dd></div>
           <div><dt>Automated cycles, zero faults</dt><dd>500+</dd></div>
           <div><dt>Slope tested (criterion &gt;20&#176;)</dt><dd>36&#176;</dd></div>
-          <div><dt>Site</dt><dd>16-Psyche hypothesized surfaces</dd></div>
+          <div><dt>Impact velocity (sim)</dt><dd>2 m/s</dd></div>
+          <div><dt>Positioning</dt><dd>Hall sensor &middot; 6 fixed magnets</dd></div>
           <div><dt>Mission partner</dt><dd>NASA Psyche &mdash; ASU Capstone</dd></div>
         </dl>
 
@@ -1199,6 +1221,17 @@ h1.detail-title{
         <div class="detail-links reveal">
           <a href="https://psyche.ssl.berkeley.edu/get-involved/capstone-projects/capstone-projects-tungsten-class/landing-system-for-hypothesized-surfaces-asu-a/" target="_blank" rel="noopener noreferrer">Mission page &nearr;</a>
           <a href="#" class="back-link">Back to home</a>
+        </div>
+
+        <div class="detail-resources reveal">
+          <h3 id="psyche-resources" data-n="05">Resources</h3>
+          <p>Full write-ups and project materials from the capstone, in case you want to dig further.</p>
+          <div class="resource-list">
+            <a href="psyche-poster.png" target="_blank" rel="noopener noreferrer"><span>Innovation Showcase poster</span><span>PNG &middot; 1.1 MB</span></a>
+            <a href="EGR%20402%20Final%20Report.docx.md" target="_blank" rel="noopener noreferrer"><span>EGR 402 capstone final report</span><span>Markdown &middot; 9.4 MB</span></a>
+            <a href="https://psyche.ssl.berkeley.edu/get-involved/capstone-projects/capstone-projects-tungsten-class/landing-system-for-hypothesized-surfaces-asu-a/" target="_blank" rel="noopener noreferrer"><span>NASA Psyche mission page</span><span>External &nearr;</span></a>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -1277,14 +1310,15 @@ h1.detail-title{
       <p class="back-link reveal"><a href="#" aria-label="Back to home">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
         Back</a></p>
-      <p class="detail-label reveal">EGR 555 &middot; COLLABORATION WITH DIGNITY HEALTH</p>
+      <p class="detail-label reveal">EGR 555 &middot; PATENT-PENDING &middot; COLLABORATION WITH DIGNITY HEALTH</p>
       <h1 class="detail-title reveal">ShadeShift<br>Therapeutic Eyewear</h1>
       <div class="detail-meta reveal">
         <span><b>Role</b> Team Lead</span>
         <span><b>Partner</b> Barrow Neurological Institute / Dignity Health</span>
         <span><b>Year</b> 2025</span>
+        <span><b>IP</b> Patent-Pending</span>
       </div>
-      <p class="detail-lead reveal">A 4-in-1 wearable for patients with photophobia, visual processing disorders, and recovering traumatic brain injuries. Tint, color, stroboscopic training, binasal occlusion &mdash; all on one pair of 3D-printed modular frames, driven by an external control module.</p>
+      <p class="detail-lead reveal">A 4-in-1 wearable for patients with photophobia, visual processing disorders, and recovering traumatic brain injuries. Tint, color, stroboscopic training, binasal occlusion &mdash; all on one pair of 3D-printed modular frames, driven by an external control module. (Patent-Pending.)</p>
     </div>
 
     <div class="split">
