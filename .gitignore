@@ -1,1 +1,4 @@
 .DS_Store
+screenshots/
+test_site.py
+test_mobile.py
