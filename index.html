@@ -57,6 +57,7 @@ nav{position:fixed;inset:0 0 auto 0;z-index:var(--z-elev);display:flex;align-ite
 :root:not([data-theme=dark]) .theme-btn .sun{display:none}
 [data-theme=dark] .theme-btn .moon{display:none}
 #hero{min-height:clamp(620px,100svh,1000px);display:flex;flex-direction:column;justify-content:center;padding-top:60px;position:relative;overflow:hidden}
+body.on-detail #hero{display:none}
 .hero-role{font-family:"JetBrains Mono",monospace;font-size:clamp(12px,1.3vw,14px);color:var(--ink-2);margin-bottom:clamp(18px,3vh,28px)}
 .hero-role b{color:var(--accent);font-weight:600}
 h1{font-size:clamp(3rem,9vw,5.5rem);font-weight:750;font-variation-settings:"wdth" 112;letter-spacing:-.025em;line-height:.98;text-wrap:balance;margin-bottom:clamp(22px,3.5vh,34px)}
@@ -221,9 +222,7 @@ h1.detail-title{font-size:clamp(2.4rem,5.5vw,4rem);font-weight:750;font-variatio
 .js #detail .reveal.in{opacity:1;transform:none;transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
 #detail .reveal{opacity:0;transform:translateY(20px)}
 #detail .reveal.in{opacity:1;transform:none;transition:opacity .7s var(--ease-quint),transform .7s var(--ease-quint)}
-#home,#detail{view-transition-name:page}
 ::view-transition-group(page){animation-duration:.35s}
-@view-transition{navigation:auto}
 ::view-transition-old(page){animation:vt-out .4s var(--ease-quart) both}
 ::view-transition-new(page){animation:vt-in .4s var(--ease-quart) both}
 @keyframes vt-out{to{opacity:0;transform:translateY(-12px) scale(.98)}}
@@ -646,13 +645,13 @@ observeReveals();
 /* Hash router */
 var baseTitle=document.title;
 function route(){var h=location.hash,home=document.getElementById('home'),m=h.match(/^#detail\/(.+)/)||h.match(/^#blog\/(.+)/);
-var blogPages=document.getElementById('blog-pages');
-if(m&&m[0].startsWith('#blog/')&&!document.getElementById('blog-'+m[1])){var slug=m[1],html=renderBlogPost(slug);if(html&&blogPages){blogPages.insertAdjacentHTML('beforeend',html);var el=blogPages.lastElementChild;el.hidden=true}}
+var blogPages=document.getElementById('blog-pages'),dynamicBlog=false;
+if(m&&m[0].startsWith('#blog/')&&!document.getElementById('blog-'+m[1])){var slug=m[1],html=renderBlogPost(slug);if(html&&blogPages){blogPages.insertAdjacentHTML('beforeend',html);dynamicBlog=true}}
 var pages=document.querySelectorAll('article.page'),target=m?document.getElementById((m[0].startsWith('#blog/')?'blog-':'detail-')+m[1]):null;
 var apply=function(){pages.forEach(function(p){p.hidden=true});
 if(h==='#blog'&&!m){home.hidden=false;document.title='Blog — Uriah Villa';document.body.classList.remove('on-detail');var blogSec=document.getElementById('blog');if(blogSec)setTimeout(function(){blogSec.scrollIntoView({behavior:REDUCE?'auto':'smooth'})},100);return}
 if(target){home.hidden=true;target.hidden=false;document.title=target.dataset.title+' — Uriah Villa';scrollTo(0,0);target.querySelectorAll('.reveal').forEach(function(el,i){el.classList.remove('pre','in');setTimeout(function(){el.classList.add('in')},Math.min(60*(i+1),600))});document.body.classList.add('on-detail');observeToc(target);observeReveals(target)}else{home.hidden=false;document.title=baseTitle;document.body.classList.remove('on-detail')}};
-if(SUPPORTS_VT&&!REDUCE){document.startViewTransition(apply)}else{apply()}}
+if(dynamicBlog||!SUPPORTS_VT||REDUCE){apply()}else{document.startViewTransition(apply)}}
 addEventListener('hashchange',route);route();
 
 /* Row click + keyboard routing */
