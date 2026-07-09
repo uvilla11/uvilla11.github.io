@@ -2,3 +2,8 @@
 screenshots/
 test_site.py
 test_mobile.py
+test_blog.py
+test_blog_screenshots.py
+test_blog_http.py
+test_debug_blog.py
+test_detail_pages.py
