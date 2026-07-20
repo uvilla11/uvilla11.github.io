@@ -2,74 +2,74 @@
 
 ## What this is
 
-A single-file static portfolio site (`index.html`, ~780 lines). All HTML, CSS, and JS live in that one file. No build system, no framework, no dependencies, no package.json.
+A dependency-free, single-page portfolio for embedded-systems and robotics engineer Uriah Villa. All production HTML, CSS, and JavaScript live in index.html; there is no package manager, framework, or build step.
 
-## How to preview
+## Preview
 
-Open `index.html` directly in a browser, or:
+Open index.html directly in a current browser, or serve the folder with any static HTTP server.
 
-```bash
-open index.html          # macOS
-python3 -m http.server   # then visit localhost:8000
-```
+## Source structure
 
-## Structure
-
-- `index.html` — the entire site: HTML structure, inline `<style>`, inline `<script>`
-- `DESIGN.md` — visual theme, color palette (OKLCH), typography, motion decisions
-- `PRODUCT.md` — brand voice, audience, design principles, anti-references
-- `*.md`, `*.pdf`, `*.jpeg`, `*.png` — resume, capstone reports, posters, project assets (linked from the site, not part of the build)
+- index.html — the complete site, including four routed case studies
+- DESIGN.md — visual direction and interaction principles
+- PRODUCT.md — audience, voice, and product requirements
+- PDF, PNG, and JPEG files — original portfolio evidence and project artifacts
+- Markdown files — source reports and historical documents; these are reference material, not polished public pages
 
 ## Architecture
 
-- **Theme**: `data-theme="dark"` on `<html>` toggles dark mode. Stored in `localStorage`. CSS custom properties under `[data-theme=dark]` swap the palette.
-- **Routing**: Hash-based (`#detail/nasa-psyche`, `#blog/hall-effect-positioning`, etc.). Detail pages and blog posts are hidden `<article class="page">` elements toggled by JS. No router library.
-- **Animations**: Scroll-driven where possible (native `animation-timeline:scroll()`). `IntersectionObserver` drives `.reveal` → `.in` transitions. All motion respects `prefers-reduced-motion: reduce`.
-- **WebGL**: A GLSL shader runs on `<canvas id="webgl-bg">` behind the hero — flowing PCB-trace-like lines responding to mouse position. Degrades to CSS gradient if WebGL unavailable.
-- **Particles**: Canvas 2D particle system on `<canvas id="particles-canvas">` — ambient drifting particles. Hidden on touch devices and reduced motion.
-- **Custom cursor**: Three-layer cursor (dot + ring + label). Hidden on touch devices (`@media(hover:none)`). Grows on interactive elements.
-- **SVGs**: Inline, stroke-based technical diagrams. All use `currentColor`/accent. No external image files for diagrams.
+- Theme: data-theme="light|dark" on the HTML element, initialized before paint and stored in localStorage when available.
+- Home navigation: standard fragment links such as #work, #experience, and #contact.
+- Case routing: minimal hash router for #case/psyche, #case/solarsense, #case/shadeshift, and #case/microgrid.
+- Views: one persistent main landmark contains the home view and every case article. The router exposes exactly one view at a time, updates the title, and moves or restores focus.
+- Motion: one hero entrance, viewport reveals, and a scroll-progress line. All respect prefers-reduced-motion.
+- Contact: Formspree endpoint xpzvwdav, with verified HTTP success and a truthful visible error fallback.
+- Mobile navigation: native details menu; desktop navigation remains native anchors.
 
-## Conventions to follow
+## Design rules
 
-- Colors are OKLCH, defined as CSS custom properties in `:root` and `[data-theme=dark]`. Accent is violet-blue — never random.
-- Typography: Archivo (headings/body), JetBrains Mono (data/labels/specs). Mono is for literal material, never decoration.
-- Animations: Use custom easing vars (`--ease-out`, `--ease-quart`, etc.). Check `REDUCE` and `HOVER` JS vars before attaching motion. Max interactive transitions ≤250ms.
-- Accessibility: `prefers-reduced-motion` kills all movement (opacity-only fallbacks). Keyboard-accessible `[data-href]` rows get `tabindex=0` + `role="button"`. Focus-visible outline on all interactive elements.
-- No gradient text. No decorative imagery. Technical diagrams are the imagery.
+- The art direction is a restrained “flight-test dossier”: authentic artifacts, exact typography, hairlines, measured values, and clear system boundaries.
+- Colors use OKLCH custom properties for light and dark themes.
+- Archivo is the primary typeface; JetBrains Mono is reserved for literal data, labels, and technical metadata.
+- No gradient text, fake loaders, particle systems, WebGL backgrounds, magnetic controls, marquees, animated counters, or continuous decorative loops.
+- Project evidence must be real. Do not publish reconstructed technical details or unsupported performance claims.
+- Clearly distinguish course prototypes, simulations, partner projects, and professional employment.
+- Public case-study images need intrinsic dimensions, useful alt text, and lazy loading when below the fold.
 
 ## Routes
 
 | Hash | Content |
-|------|---------|
-| `#` or empty | Home page (default) |
-| `#work`, `#experience`, `#about`, `#blog`, `#contact` | Scroll to section |
-| `#detail/nasa-psyche` | NASA Psyche project detail |
-| `#detail/solarsense` | SolarSENSE project detail |
-| `#detail/shadeshift` | ShadeShift project detail |
-| `#detail/microgrid` | Microgrid project detail |
-| `#detail/room-weather` | Room Weather project detail |
-| `#blog/hall-effect-positioning` | Blog: Hall-Effect Positioning |
-| `#blog/tinyml-on-8bit` | Blog: TinyML on 8-Bit MCU |
-| `#blog/kicad-pcb-walkthrough` | Blog: KiCad PCB Walkthrough |
-| `#blog/questioning-xendee` | Blog: Questioning XENDEE Results |
+|---|---|
+| # or empty | Home |
+| #work | Selected work |
+| #experience | Professional experience and education |
+| #builds | Additional builds |
+| #about | Biography and capability matrix |
+| #archive | Evidence archive |
+| #contact | Contact |
+| #case/psyche | ASU Capstone × NASA Psyche |
+| #case/solarsense | SolarSENSE |
+| #case/shadeshift | ShadeShift |
+| #case/microgrid | Critical-facility microgrid study |
 
-## Keyboard shortcuts
+## Conventions
 
-| Key | Action |
-|-----|--------|
-| `j` / `k` | Navigate between project rows |
-| `Enter` | Open focused project |
-| `Esc` | Go back / close overlay |
-| `/` | Focus first project row |
-| `?` | Toggle keyboard shortcuts overlay |
-| `t` | Toggle theme |
+- Use native anchors for navigation and native controls for actions.
+- Keep one visible main landmark and preserve route focus behavior.
+- Maintain WCAG AA contrast, visible focus, semantic headings, and reduced-motion behavior.
+- Prefer existing local assets and inline SVG diagrams over new dependencies.
+- The academic source documents may be stale or contradictory. When updating facts, reconcile them with Uriah before promoting a number or role claim.
+- Keep the footer claim “HAND-BUILT · NO FRAMEWORK” true.
 
-## Gotchas
+## Adding a case study
 
-- Adding a new project means: (1) a `.row` in `#work` with `data-categories` and optional `data-href`, (2) an `<article id="detail-*">` page, (3) a `data-href` link on the row. The hash router handles the rest.
-- Adding a new blog post means: (1) a `.blog-card` in `#blog` with `data-href="#blog/slug"`, (2) an `<article id="blog-slug">` page.
-- The site has no transpilation — write modern JS that works in current browsers only.
-- WebGL shader is in GLSL (inline in JS). The fragment shader uses `precision highp float` and `#version 300 es` for WebGL2, falls back to WebGL1.
-- Footer says "HAND-BUILT, NO FRAMEWORK" — keep it that way.
-- The contact form uses Formspree (`xpzvwdav`). Replace the form ID if switching services.
+1. Add a native link using href="#case/slug".
+2. Add an article with class="case-page", id="case-slug", and a data-title inside #casePages.
+3. Follow the existing structure: brief, facts, ownership, decisions, validation, limitations, and artifacts.
+4. Base every technical statement on a supplied source or a user-confirmed fact.
+
+## Before handoff
+
+- Run a JavaScript syntax check on the final inline script.
+- Check duplicate IDs, fragment targets, local asset paths, image alt text, and new-tab rel values.
+- Test home anchors, every case route, browser Back, keyboard focus, mobile navigation, both themes, reduced motion, and form failure behavior.
